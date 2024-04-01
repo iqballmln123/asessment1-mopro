@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">GlowGuide</string>
-
+    //Navigasi
     <string name="menu">Tombol Menu</string>
     <string name="info">Tentang Aplikasi</string>
+    //Jenis Kulit (MainScreen)
+    <string name="intro">Selamat datang di GlowGuide! Ingin mengetahui Perawatan Kulit apa yang tepat untuk jenis kulit kamu? Coba sekarang^^</string>
+    <string name="nama">Nama Anda</string>
+    <string name="kulit_normal">Kulit Normal</string>
+    <string name="kulit_kering">Kulit Kering</string>
+    <string name="kulit_berminyak">Kulit Berminyak</string>
+    <string name="kulit_kombinasi">Kulit Kombinas</string>
+    <string name="komedo_putih">Komedo Putih</string>
+    <string name="komedo_hitam">Komedo Hitam</string>
+    <string name="jerawat">Jerawat</string>
+    <string name="keriput">Keriput</string>
 </resources>
