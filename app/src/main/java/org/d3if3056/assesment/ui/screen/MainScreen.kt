@@ -11,7 +11,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,12 +25,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.Hyphens
@@ -41,12 +45,11 @@ import org.d3if3056.assesment.ui.theme.AssesmentTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(){
+fun MainScreen() {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -84,10 +87,24 @@ fun MainScreen(){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenContent(modifier: Modifier){
+fun ScreenContent(modifier: Modifier) {
     var nama by remember { mutableStateOf("") }
-
+    var expanded by remember { mutableStateOf(false) }
+    var selectedItemIndex by remember { mutableIntStateOf(0) }
+    
+    val jenisKulit = listOf(
+        stringResource(id = R.string.jenis_kulit),
+        stringResource(id = R.string.kulit_normal),
+        stringResource(id = R.string.kulit_kering),
+        stringResource(id = R.string.kulit_berminyak),
+        stringResource(id = R.string.kulit_kombinasi)
+    )
+    if (selectedItemIndex == -1){
+        selectedItemIndex = jenisKulit.indexOf(stringResource(id = R.string.jenis_kulit))
+    }
+    
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -97,7 +114,7 @@ fun ScreenContent(modifier: Modifier){
         Text(
             text = stringResource(id = R.string.intro),
             style = MaterialTheme.typography.bodyLarge.copy(
-              lineBreak = LineBreak.Paragraph,
+                lineBreak = LineBreak.Paragraph,
                 hyphens = Hyphens.Auto
             ),
             modifier = Modifier.fillMaxWidth(),
@@ -105,8 +122,8 @@ fun ScreenContent(modifier: Modifier){
         )
         OutlinedTextField(
             value = nama,
-            onValueChange = { nama = it},
-            label = { Text(text = stringResource(id = R.string.nama))},
+            onValueChange = { nama = it },
+            label = { Text(text = stringResource(id = R.string.nama)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -114,6 +131,45 @@ fun ScreenContent(modifier: Modifier){
             ),
             modifier = Modifier.fillMaxWidth()
         )
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value = jenisKulit[selectedItemIndex],
+                onValueChange = { },
+                label = {Text(text = stringResource(id = R.string.jenis_kulit))},
+                readOnly = true,
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor()
+            )
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                jenisKulit.forEachIndexed { index, item ->
+                    DropdownMenuItem(
+                        text = {
+                               Text(
+                                   text = item,
+                                   fontWeight = if (index == selectedItemIndex)
+                                       FontWeight.Bold else null
+                               )
+                        },
+                        onClick = {
+                            selectedItemIndex = index
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 
