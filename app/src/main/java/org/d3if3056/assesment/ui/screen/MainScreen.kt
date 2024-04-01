@@ -3,6 +3,7 @@ package org.d3if3056.assesment.ui.screen
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -26,9 +28,11 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -101,6 +105,20 @@ fun ScreenContent(modifier: Modifier) {
         stringResource(id = R.string.kulit_berminyak),
         stringResource(id = R.string.kulit_kombinasi)
     )
+    val komplikasiKulit = listOf(
+        stringResource(id = R.string.komedo_putih),
+        stringResource(id = R.string.komedo_hitam),
+        stringResource(id = R.string.jerawat),
+        stringResource(id = R.string.keriput)
+    )
+    val checked = remember {
+        mutableStateListOf<Boolean>().apply {
+            repeat(komplikasiKulit.size){
+                add(false)
+            }
+        }
+    }
+
     if (selectedItemIndex == -1){
         selectedItemIndex = jenisKulit.indexOf(stringResource(id = R.string.jenis_kulit))
     }
@@ -168,6 +186,22 @@ fun ScreenContent(modifier: Modifier) {
                         }
                     )
                 }
+            }
+        }
+        komplikasiKulit.forEachIndexed{index, stringResId ->
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Checkbox(
+                    checked = checked[index],
+                    onCheckedChange = {checked[index] = it},
+                    modifier = Modifier.alignByBaseline()
+                )
+                Text(
+                    text = stringResId,
+//                    modifier = Modifier.padding(start = 8.dp),
+                )
             }
         }
     }
