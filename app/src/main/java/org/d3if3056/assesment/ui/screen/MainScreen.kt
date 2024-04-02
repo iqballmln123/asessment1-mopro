@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -95,6 +95,7 @@ fun getDataMain(): List<MainImage>{
 fun ScreenContent(modifier: Modifier) {
     val data = getDataMain()
     val configuration = LocalConfiguration.current
+    val firstTwoImages = data.take(2)
 
     Column(
         modifier = modifier
@@ -114,14 +115,8 @@ fun ScreenContent(modifier: Modifier) {
         LazyRow(
             modifier = Modifier.padding(top = 12.dp)
         ) {
-            itemsIndexed(data.chunked(3)) { _, chunk ->
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    chunk.forEach { image ->
-                        ButtonComponent(image)
-                    }
-                }
+            items(firstTwoImages) {image ->
+                ButtonComponent(image)
             }
         }
         if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
