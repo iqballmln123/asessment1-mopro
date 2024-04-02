@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,12 +23,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import org.d3if3056.assesment.R
 import org.d3if3056.assesment.ui.theme.AssesmentTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutScreen() {
+fun AboutScreen(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -45,13 +48,15 @@ fun AboutScreen() {
                         overflow = TextOverflow.Ellipsis
                     )
                 },
-                actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Info,
-                            contentDescription = stringResource(id = R.string.info)
-                        )
-                    }
+                navigationIcon = {
+                                 IconButton(
+                                     onClick = { navController.popBackStack() }
+                                 ) {
+                                     Icon(
+                                         imageVector = Icons.Filled.ArrowBack,
+                                         contentDescription = stringResource(id = R.string.kembali)
+                                     )
+                                 }
                 },
                 scrollBehavior = scrollBehavior
             )
@@ -81,6 +86,6 @@ fun AboutScreen() {
 @Composable
 fun AboutScreenPreview() {
     AssesmentTheme {
-        AboutScreen()
+        AboutScreen(rememberNavController())
     }
 }
