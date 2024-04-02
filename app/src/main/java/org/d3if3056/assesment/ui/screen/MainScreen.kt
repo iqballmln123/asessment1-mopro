@@ -42,13 +42,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import org.d3if3056.assesment.R
 import org.d3if3056.assesment.model.MainImage
+import org.d3if3056.assesment.navigation.Screen
 import org.d3if3056.assesment.ui.theme.AssesmentTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -67,7 +70,11 @@ fun MainScreen() {
                     )
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(
+                        onClick = {
+                            navController.navigate(Screen.About.route)
+                        }
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.Info,
                             contentDescription = stringResource(id = R.string.info)
@@ -167,6 +174,6 @@ fun ButtonComponent(mainImage: MainImage){
 @Composable
 fun ScreenPreview() {
     AssesmentTheme {
-        MainScreen()
+        MainScreen(rememberNavController())
     }
 }
