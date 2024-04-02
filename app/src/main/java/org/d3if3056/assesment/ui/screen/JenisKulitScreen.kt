@@ -5,14 +5,18 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
@@ -96,6 +100,7 @@ fun JenisContent(modifier: Modifier) {
     var nama by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var selectedItemIndex by remember { mutableIntStateOf(0) }
+    var hasilAnalisis by remember { mutableStateOf("") }
 
     val jenisKulit = listOf(
         stringResource(id = R.string.jenis_kulit),
@@ -104,7 +109,6 @@ fun JenisContent(modifier: Modifier) {
         stringResource(id = R.string.kulit_berminyak),
         stringResource(id = R.string.kulit_kombinasi)
     )
-
     val komplikasiKulit = listOf(
         stringResource(id = R.string.komedo_putih),
         stringResource(id = R.string.komedo_hitam),
@@ -113,21 +117,23 @@ fun JenisContent(modifier: Modifier) {
     )
     val checked = remember {
         mutableStateListOf<Boolean>().apply {
-            repeat(komplikasiKulit.size){
+            repeat(komplikasiKulit.size) {
                 add(false)
             }
         }
     }
 
-    if (selectedItemIndex == -1){
+    if (selectedItemIndex == -1) {
         selectedItemIndex = jenisKulit.indexOf(stringResource(id = R.string.jenis_kulit))
     }
 
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = stringResource(id = R.string.intro_jenis_kulit),
@@ -217,7 +223,56 @@ fun JenisContent(modifier: Modifier) {
                 }
             }
         }
+        Button(
+            onClick = {
+                      cekHasil(nama, jenisKulit[selectedItemIndex],komplikasiKulit,checked){
+                          hasil -> hasilAnalisis = hasil
+                      }
+            },
+            modifier = Modifier.padding(top = 8.dp),
+            contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+        ) {
+            Text(text = stringResource(id = R.string.cek_hasil))
+        }
+        if (hasilAnalisis.isNotEmpty()){
+            Text(
+                text = hasilAnalisis,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Start
+            )
+        }
     }
+}
+
+private fun cekHasil(nama: String, jenisKulit: String, komplikasiKulit: List<String>, checked: List<Boolean>, onHasilAnalisisReady: (String) -> Unit){
+    val komplikasiTerpilih = mutableListOf<String>()
+
+    for (i in komplikasiKulit.indices) {
+        if (checked[i]) {
+            komplikasiTerpilih.add(komplikasiKulit[i])
+        }
+    }
+
+    val hasilAnalisis = buildString {
+        appendLine("Haii $nama setelah dianalisa dengan info yang kamu berikan dibawah ini:")
+        appendLine("Jenis Kulit : $jenisKulit")
+
+        // Lakukan logika untuk menambahkan rekomendasi bahan skincare
+        appendLine("Rekomendasi bahan skincare sesuai jenis kulit:")
+        appendLine("Bahan yang cocok untuk jenis kulit $jenisKulit")
+
+        // Lakukan logika untuk menambahkan peringatan bahan skincare
+        appendLine("Hindari bahan skincare sesuai jenis kulit:")
+        appendLine("Bahan yang sebaiknya dihindari untuk jenis kulit $jenisKulit")
+
+        // Lakukan logika untuk menambahkan rekomendasi bahan skincare sesuai komplikasi kulit
+        if (komplikasiTerpilih.isNotEmpty()) {
+            appendLine("Komplikasi : ${komplikasiTerpilih.joinToString()}")
+            appendLine("Rekomendasi bahan skincare sesuai komplikasi kulit:")
+            appendLine("Bahan yang cocok untuk mengatasi ${komplikasiTerpilih.joinToString()}")
+        }
+    }
+    onHasilAnalisisReady(hasilAnalisis)
 }
 
 @Preview(showBackground = true)
