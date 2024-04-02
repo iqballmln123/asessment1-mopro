@@ -1,15 +1,18 @@
 package org.d3if3056.assesment.ui.screen
 
 import android.content.res.Configuration
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
@@ -33,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -43,12 +47,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import org.d3if3056.assesment.R
 import org.d3if3056.assesment.ui.theme.AssesmentTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun JenisKulitScreen() {
+fun JenisKulitScreen(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -66,11 +72,13 @@ fun JenisKulitScreen() {
                         overflow = TextOverflow.Ellipsis
                     )
                 },
-                actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                navigationIcon = {
+                    IconButton(
+                        onClick = { navController.popBackStack() }
+                    ) {
                         Icon(
-                            imageVector = Icons.Filled.Info,
-                            contentDescription = stringResource(id = R.string.info)
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(id = R.string.kembali)
                         )
                     }
                 },
@@ -96,6 +104,7 @@ fun JenisContent(modifier: Modifier) {
         stringResource(id = R.string.kulit_berminyak),
         stringResource(id = R.string.kulit_kombinasi)
     )
+
     val komplikasiKulit = listOf(
         stringResource(id = R.string.komedo_putih),
         stringResource(id = R.string.komedo_hitam),
@@ -121,7 +130,7 @@ fun JenisContent(modifier: Modifier) {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.intro),
+            text = stringResource(id = R.string.intro_jenis_kulit),
             style = MaterialTheme.typography.bodyLarge.copy(
                 lineBreak = LineBreak.Paragraph,
                 hyphens = Hyphens.Auto
@@ -179,30 +188,47 @@ fun JenisContent(modifier: Modifier) {
                 }
             }
         }
-        komplikasiKulit.forEachIndexed{index, stringResId ->
-            Row (
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ){
-                Checkbox(
-                    checked = checked[index],
-                    onCheckedChange = {checked[index] = it},
-                    modifier = Modifier.alignByBaseline()
-                )
-                Text(
-                    text = stringResId,
-//                    modifier = Modifier.padding(start = 8.dp),
-                )
+//        OutlinedTextField(
+//            value = "",
+//            onValueChange = { },
+//            label = { Text(text = stringResource(id = R.string.komplikasi_kulit))},
+//            readOnly = true,
+//            modifier = Modifier.fillMaxWidth(),
+//            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.None)
+//        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
+                .padding(16.dp)
+        ) {
+            Column {
+                komplikasiKulit.forEachIndexed { index, stringResId ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Checkbox(
+                            checked = checked[index],
+                            onCheckedChange = { checked[index] = it },
+                            modifier = Modifier.alignByBaseline()
+                        )
+                        Text(
+                            text = stringResId,
+                            modifier = Modifier.padding(start = 8.dp),
+                        )
+                    }
+                }
             }
         }
     }
 }
 
-//@Preview(showBackground = true)
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-//@Composable
-//fun ScreenPreview() {
-//    AssesmentTheme {
-//        JenisKulitScreen()
-//    }
-//}
+@Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun JenisKulitScreenPreview() {
+    AssesmentTheme {
+        JenisKulitScreen(rememberNavController())
+    }
+}

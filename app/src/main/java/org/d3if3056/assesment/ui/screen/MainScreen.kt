@@ -85,7 +85,7 @@ fun MainScreen(navController: NavHostController) {
             )
         }
     ) { padding ->
-        ScreenContent(Modifier.padding(padding))
+        ScreenContent(navController,Modifier.padding(padding))
     }
 }
 
@@ -99,7 +99,7 @@ fun getDataMain(): List<MainImage>{
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier) {
+fun ScreenContent(navController: NavHostController,modifier: Modifier) {
     val data = getDataMain()
     val configuration = LocalConfiguration.current
     val firstTwoImages = data.take(2)
@@ -123,7 +123,7 @@ fun ScreenContent(modifier: Modifier) {
             modifier = Modifier.padding(top = 12.dp)
         ) {
             items(firstTwoImages) {image ->
-                ButtonComponent(image)
+                ButtonComponent(image, navController)
             }
         }
         if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -131,16 +131,24 @@ fun ScreenContent(modifier: Modifier) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                ButtonComponent(data[2])
+                ButtonComponent(data[2], navController)
             }
         }
     }
 }
 
 @Composable
-fun ButtonComponent(mainImage: MainImage){
+fun ButtonComponent(mainImage: MainImage, navController: NavHostController){
     OutlinedButton(
-        onClick = { /*TODO*/ },
+        onClick = {
+                  when(mainImage){
+                      is MainImage -> {
+                          when (mainImage.imageResId){
+                              R.drawable.jenis_kulit -> navController.navigate(Screen.JenisKulit.route)
+                          }
+                      }
+                  }
+        },
         modifier = Modifier
             .height(170.dp)
             .aspectRatio(1f)
