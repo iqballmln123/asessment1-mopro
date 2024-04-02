@@ -13,11 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.Hyphens
@@ -93,6 +94,7 @@ fun getDataMain(): List<MainImage>{
 @Composable
 fun ScreenContent(modifier: Modifier) {
     val data = getDataMain()
+    val configuration = LocalConfiguration.current
 
     Column(
         modifier = modifier
@@ -109,18 +111,26 @@ fun ScreenContent(modifier: Modifier) {
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Justify
         )
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ){
-            ButtonComponent(data[0])
-            ButtonComponent(data[1])
+        LazyRow(
+            modifier = Modifier.padding(top = 12.dp)
+        ) {
+            itemsIndexed(data.chunked(3)) { index, chunk ->
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    chunk.forEach { image ->
+                        ButtonComponent(image)
+                    }
+                }
+            }
         }
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ){
-            ButtonComponent(data[2])
+        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                ButtonComponent(data[2])
+            }
         }
     }
 }
@@ -146,8 +156,6 @@ fun ButtonComponent(mainImage: MainImage){
                 contentDescription = mainImage.nama,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-//                    .height(100.dp)
-//                    .width(60.dp)
                     .size(105.dp)
             )
             Text(
