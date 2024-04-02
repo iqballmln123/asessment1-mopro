@@ -114,7 +114,7 @@ fun ScreenContent(modifier: Modifier) {
         LazyRow(
             modifier = Modifier.padding(top = 12.dp)
         ) {
-            itemsIndexed(data.chunked(3)) { index, chunk ->
+            itemsIndexed(data.chunked(3)) { _, chunk ->
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
