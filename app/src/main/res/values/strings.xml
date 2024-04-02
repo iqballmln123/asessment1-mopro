@@ -2,11 +2,16 @@
     <string name="app_name">GlowGuide</string>
 
     //Navigasi
-    <string name="menu">Tombol Menu</string>
     <string name="info">Tentang Aplikasi</string>
 
-    //Jenis Kulit (MainScreen)
-    <string name="intro">Selamat datang di GlowGuide! Ingin mengetahui Perawatan Kulit apa yang tepat untuk jenis kulit kamu? Coba sekarang^^</string>
+    //MainScreen
+    <string name="intro">Selamat datang di GlowGuide! </string>
+    <string name="image_jenis_kulit">Jenis Kulit</string>
+    <string name="image_product_skincare">Produk Skincare</string>
+    <string name="image_skincare_routine">Rutinitas Perawatan</string>
+
+    //Jenis Kulit
+    <string name="intro_jenis_kulit">Ingin mengetahui Perawatan Kulit apa yang tepat untuk jenis kulit kamu? Coba sekarang!</string>
     <string name="nama">Nama Anda</string>
     <string name="jenis_kulit">Jenis Kulit Anda</string>
     <string name="kulit_normal">Kulit Normal</string>
