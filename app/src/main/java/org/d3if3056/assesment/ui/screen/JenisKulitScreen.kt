@@ -188,14 +188,6 @@ fun JenisContent(modifier: Modifier) {
                 }
             }
         }
-//        OutlinedTextField(
-//            value = "",
-//            onValueChange = { },
-//            label = { Text(text = stringResource(id = R.string.komplikasi_kulit))},
-//            readOnly = true,
-//            modifier = Modifier.fillMaxWidth(),
-//            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.None)
-//        )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -203,6 +195,10 @@ fun JenisContent(modifier: Modifier) {
                 .padding(16.dp)
         ) {
             Column {
+                Text(
+                    text = stringResource(id = R.string.komplikasi_kulit),
+                    textAlign = TextAlign.Justify
+                )
                 komplikasiKulit.forEachIndexed { index, stringResId ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
