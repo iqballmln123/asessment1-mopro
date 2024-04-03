@@ -22,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3056.assesment.R
-import org.d3if3056.assesment.navigation.Screen
 import org.d3if3056.assesment.ui.theme.AssesmentTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +39,7 @@ fun RekomendasiScreen(navController: NavHostController) {
                 ),
                 title = {
                     Text(
-                        text = stringResource(id = R.string.app_name),
+                        text = stringResource(id = R.string.page2),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -59,8 +58,13 @@ fun RekomendasiScreen(navController: NavHostController) {
             )
         }
     ) { padding ->
-        JenisContent(Modifier.padding(padding))
+        RekomendasiContent(Modifier.padding(padding))
     }
+}
+
+@Composable
+fun RekomendasiContent (modifier: Modifier){
+
 }
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)

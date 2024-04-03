@@ -73,7 +73,7 @@ fun JenisKulitScreen(navController: NavHostController) {
                 ),
                 title = {
                     Text(
-                        text = stringResource(id = R.string.app_name),
+                        text = stringResource(id = R.string.page1),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

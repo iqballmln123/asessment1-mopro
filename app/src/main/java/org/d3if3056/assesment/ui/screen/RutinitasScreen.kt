@@ -39,7 +39,7 @@ fun RutinitasScreen(navController: NavHostController) {
                 ),
                 title = {
                     Text(
-                        text = stringResource(id = R.string.app_name),
+                        text = stringResource(id = R.string.page3),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -58,8 +58,13 @@ fun RutinitasScreen(navController: NavHostController) {
             )
         }
     ) { padding ->
-        JenisContent(Modifier.padding(padding))
+        RutinitasContent(Modifier.padding(padding))
     }
+}
+
+@Composable
+fun RutinitasContent (modifier: Modifier){
+
 }
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
