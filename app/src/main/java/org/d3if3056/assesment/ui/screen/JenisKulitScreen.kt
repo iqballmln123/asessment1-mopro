@@ -101,10 +101,12 @@ fun JenisKulitScreen(navController: NavHostController) {
 fun JenisContent(modifier: Modifier) {
     var nama by remember { mutableStateOf("") }
     var namaError by remember { mutableStateOf(false) }
-    
+
     var expanded by remember { mutableStateOf(false) }
     var selectedItemIndex by remember { mutableIntStateOf(0) }
     var hasilAnalisis by remember { mutableStateOf("") }
+    var showAnalysisResult by remember { mutableStateOf(false) }
+    var jenisKulitError by remember { mutableStateOf(false) }
 
     val jenisKulit = listOf(
         stringResource(id = R.string.jenis_kulit),
@@ -113,8 +115,7 @@ fun JenisContent(modifier: Modifier) {
         stringResource(id = R.string.kulit_berminyak),
         stringResource(id = R.string.kulit_kombinasi)
     )
-    var jenisKulitError by remember { mutableStateOf(false) }
-            
+
     val komplikasiKulit = listOf(
         stringResource(id = R.string.komedo_putih),
         stringResource(id = R.string.komedo_hitam),
@@ -129,9 +130,6 @@ fun JenisContent(modifier: Modifier) {
         }
     }
 
-    if (selectedItemIndex == -1) {
-        selectedItemIndex = jenisKulit.indexOf(stringResource(id = R.string.jenis_kulit))
-    }
 
     Column(
         modifier = modifier
@@ -155,8 +153,8 @@ fun JenisContent(modifier: Modifier) {
             onValueChange = { nama = it },
             label = { Text(text = stringResource(id = R.string.nama)) },
             isError = namaError,
-            supportingText = { ErrorHint(isError = namaError)},
-            trailingIcon = { IconPicker(isError = namaError, unit = "")},
+            supportingText = { ErrorHint(isError = namaError) },
+            trailingIcon = { IconPicker(isError = namaError, unit = "") },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -174,10 +172,10 @@ fun JenisContent(modifier: Modifier) {
                 onValueChange = { },
                 label = { Text(text = stringResource(id = R.string.jenis_kulit)) },
                 isError = jenisKulitError,
-                supportingText = {ErrorHint(isError = jenisKulitError)},
+                supportingText = { ErrorHint(isError = jenisKulitError) },
                 readOnly = true,
                 trailingIcon = {
-                    if (jenisKulitError){
+                    if (jenisKulitError) {
                         IconPicker(isError = true, unit = "")
                     } else {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
@@ -239,22 +237,38 @@ fun JenisContent(modifier: Modifier) {
                 }
             }
         }
-        Button(
-            onClick = {
-                namaError = (nama == "")
-                jenisKulitError = (selectedItemIndex == 0)
-                if (namaError || jenisKulitError) return@Button
-
-                      cekHasil(nama, jenisKulit[selectedItemIndex],komplikasiKulit,checked){
-                          hasil -> hasilAnalisis = hasil
-                      }
-            },
-            modifier = Modifier.padding(top = 8.dp),
-            contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text(text = stringResource(id = R.string.cek_hasil))
+            Button(
+                onClick = {
+                    nama = ""
+                    selectedItemIndex = 0
+                    checked.fill(false)
+                    hasilAnalisis = ""
+                    showAnalysisResult = false
+                },
+                modifier = Modifier.padding(top = 8.dp),
+                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+            ) {
+                Text(text = stringResource(id = R.string.reset))
+            }
+            Button(
+                onClick = {
+                    namaError = (nama == "")
+                    jenisKulitError = (selectedItemIndex == 0)
+                    if (namaError || jenisKulitError) return@Button
+
+                    showAnalysisResult = true
+                },
+                modifier = Modifier.padding(top = 8.dp),
+                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+            ) {
+                Text(text = stringResource(id = R.string.cek_hasil))
+            }
         }
-        if (hasilAnalisis.isNotEmpty()){
+        if (showAnalysisResult) {
             Divider(
                 modifier = Modifier.padding(vertical = 8.dp),
                 thickness = 1.dp
@@ -263,18 +277,98 @@ fun JenisContent(modifier: Modifier) {
                 text = stringResource(id = R.string.header_hasil),
                 style = MaterialTheme.typography.titleLarge
             )
-            Text(
-                text = hasilAnalisis,
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Justify
-            )
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.sapaan, nama),
+                    textAlign = TextAlign.Justify
+                )
+
+                Text(
+                    text = stringResource(id = R.string.hasil_analisis, hasilAnalisis),
+                    textAlign = TextAlign.Justify
+                )
+
+                Text(
+                    text = stringResource(id = R.string.jenis_kulit_label) + jenisKulit[selectedItemIndex],
+                    textAlign = TextAlign.Justify
+                )
+
+                if (checked.any { it }) {
+                    val selectedComplications = mutableListOf<String>()
+                    for ((index, isSelected) in checked.withIndex()) {
+                        if (isSelected) {
+                            selectedComplications.add(komplikasiKulit[index])
+                        }
+                    }
+                    val finalText = stringResource(
+                        id = R.string.komplikasi_label,
+                        komplikasiKulit.joinToString(", "),
+                        selectedComplications.joinToString(", ")
+                    )
+                    Row {
+                        Text(text = finalText)
+                        Text(text = selectedComplications.joinToString(", "))
+                    }
+                }
+
+                Text(
+                    text = stringResource(id = R.string.rekomendasi_jenis_kulit),
+                    textAlign = TextAlign.Justify
+                )
+                when (jenisKulit[selectedItemIndex]) {
+                    stringResource(id = R.string.kulit_normal) -> Text(text = stringResource(id = R.string.rekomendasi_kulit_normal))
+                    stringResource(id = R.string.kulit_kering) -> Text(text = stringResource(id = R.string.rekomendasi_kulit_kering))
+                    stringResource(id = R.string.kulit_berminyak) -> Text(text = stringResource(id = R.string.rekomendasi_kulit_berminyak))
+                    stringResource(id = R.string.kulit_kombinasi) -> Text(text = stringResource(id = R.string.rekomendasi_kulit_kombinasi))
+                }
+
+                Text(
+                    text = stringResource(id = R.string.hindari_jenis_kulit),
+                    textAlign = TextAlign.Justify
+                )
+                when (jenisKulit[selectedItemIndex]) {
+                    stringResource(id = R.string.kulit_normal) -> Text(text = stringResource(id = R.string.hindari_kulit_normal))
+                    stringResource(id = R.string.kulit_kering) -> Text(text = stringResource(id = R.string.hindari_kulit_kering))
+                    stringResource(id = R.string.kulit_berminyak) -> Text(text = stringResource(id = R.string.hindari_kulit_berminyak))
+                    stringResource(id = R.string.kulit_kombinasi) -> Text(text = stringResource(id = R.string.hindari_kulit_kombinasi))
+                }
+
+                for ((index, complication) in komplikasiKulit.withIndex()) {
+                    if (checked[index]) {
+                        Text(
+                            text = stringResource(id = R.string.rekomendasi_komplikasi),
+                            textAlign = TextAlign.Justify
+                        )
+                        when (complication) {
+                            stringResource(id = R.string.komedo_putih) -> {
+                                Text(text = stringResource(id = R.string.rekomendasi_komplikasi_komedo_putih))
+                            }
+
+                            stringResource(id = R.string.komedo_hitam) -> {
+                                Text(text = stringResource(id = R.string.rekomendasi_komplikasi_komedo_hitam))
+                            }
+
+                            stringResource(id = R.string.jerawat) -> {
+                                Text(text = stringResource(id = R.string.rekomendasi_komplikasi_jerawat))
+                            }
+
+                            stringResource(id = R.string.keriput) -> {
+                                Text(text = stringResource(id = R.string.rekomendasi_komplikasi_keriput))
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
 fun IconPicker(isError: Boolean, unit: String) {
-    if (isError){
+    if (isError) {
         Icon(imageVector = Icons.Filled.Warning, contentDescription = null)
     } else {
         Text(text = unit)
@@ -282,40 +376,10 @@ fun IconPicker(isError: Boolean, unit: String) {
 }
 
 @Composable
-fun ErrorHint(isError: Boolean){
-    if (isError){
+fun ErrorHint(isError: Boolean) {
+    if (isError) {
         Text(text = stringResource(id = R.string.input_invalid))
     }
-}
-private fun cekHasil(nama: String, jenisKulit: String, komplikasiKulit: List<String>, checked: List<Boolean>, onHasilAnalisisReady: (String) -> Unit){
-    val komplikasiTerpilih = mutableListOf<String>()
-
-    for (i in komplikasiKulit.indices) {
-        if (checked[i]) {
-            komplikasiTerpilih.add(komplikasiKulit[i])
-        }
-    }
-
-    val hasilAnalisis = buildString {
-        appendLine("Haii $nama setelah dianalisa dengan info yang kamu berikan dibawah ini:")
-        appendLine("Jenis Kulit : $jenisKulit")
-
-        // Lakukan logika untuk menambahkan rekomendasi bahan skincare
-        appendLine("Rekomendasi bahan skincare sesuai jenis kulit:")
-        appendLine("Bahan yang cocok untuk jenis kulit $jenisKulit")
-
-        // Lakukan logika untuk menambahkan peringatan bahan skincare
-        appendLine("Hindari bahan skincare sesuai jenis kulit:")
-        appendLine("Bahan yang sebaiknya dihindari untuk jenis kulit $jenisKulit")
-
-        // Lakukan logika untuk menambahkan rekomendasi bahan skincare sesuai komplikasi kulit
-        if (komplikasiTerpilih.isNotEmpty()) {
-            appendLine("Komplikasi : ${komplikasiTerpilih.joinToString()}")
-            appendLine("Rekomendasi bahan skincare sesuai komplikasi kulit:")
-            appendLine("Bahan yang cocok untuk mengatasi ${komplikasiTerpilih.joinToString()}")
-        }
-    }
-    onHasilAnalisisReady(hasilAnalisis)
 }
 
 @Preview(showBackground = true)

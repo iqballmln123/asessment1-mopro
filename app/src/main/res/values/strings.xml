@@ -1,21 +1,21 @@
 <resources>
-    <string name="app_name">GlowGuide</string>
+    <string name="app_name" translatable="false">GlowGuide</string>
 
-<!--    Navigasi-->
+    <!--    Navigasi-->
     <string name="info">Tentang Aplikasi</string>
     <string name="kembali">Kembali</string>
 
-<!--    MainScreen-->
+    <!--    MainScreen-->
     <string name="intro">Selamat datang di GlowGuide😊! Teman setia Anda dalam perjalanan kecantikan dan perawatan kulit. Mulai perjalanan kecantikan Anda sekarang dan temukan kilau alami yang Anda impikan!</string>
     <string name="image_jenis_kulit">Analisa Kulitmu</string>
     <string name="image_product_skincare">Rekomendasi Produk</string>
     <string name="image_skincare_routine">Rutinitas Perawatan</string>
 
-<!--    About Screen-->
+    <!--    About Screen-->
     <string name="info_aplikasi">Aplikasi GlowGuide merupakan aplikasi yang membantu pengguna dalam mengetahui jenis kulit pengguna, memberikan saran tentang bahan-bahan yang cocok dan yang sebaiknya dihindari dalam Skincare, merekomendasi produk-produk yang sesuai dan memberikan rutinitas perawatan kulit yang optimal berdasarkan jenis kulit. Sehingga fitur utamanya sebagai berikut:\n\n1. Analisa Kulitmu\n2. Rekomendasi Produk\n3. Rutinitas Perawatan</string>
-    <string name="copyright">Copyright © 2024 Chaeza Fauzyyah Inayah.\nAll rights reserved.</string>
+    <string name="copyright" translatable="false">Copyright © 2024 Chaeza Fauzyyah Inayah.\nAll rights reserved.</string>
 
-<!--    Jenis Kulit-->
+    <!--    Jenis Kulit-->
     <string name="intro_jenis_kulit">Ingin mengetahui Perawatan Kulit apa yang tepat untuk jenis kulit kamu? Coba sekarang!</string>
     <string name="nama">Nama Anda</string>
     <string name="jenis_kulit">Jenis Kulit Anda</string>
@@ -29,12 +29,13 @@
     <string name="jerawat">Jerawat</string>
     <string name="keriput">Keriput</string>
 
-<!--    Fungsional di Jenis Kulit-->
+    <!--    Fungsional di Jenis Kulit-->
     <string name="input_invalid">Tidak boleh kosong</string>
     <string name="kulit_invalid">Harus memiilih jenis kulit</string>
     <string name="cek_hasil">Cek Hasil</string>
+    <string name="reset">Hapus</string>
 
-<!--    Output Cek Kulit-->
+    <!--    Cek Kulit-->
     <string name="rekomendasi_kulit_normal">Bahan rekomendasi untuk kulit normal</string>
     <string name="rekomendasi_kulit_kering">Bahan rekomendasi untuk kulit kering</string>
     <string name="rekomendasi_kulit_berminyak">Bahan rekomendasi untuk kulit berminyak</string>
@@ -43,14 +44,20 @@
     <string name="hindari_kulit_kering">Bahan yang harus dihindari untuk kulit kering</string>
     <string name="hindari_kulit_berminyak">Bahan yang harus dihindari untuk kulit berminyak</string>
     <string name="hindari_kulit_kombinasi">Bahan yang harus dihindari untuk kulit kombinasi</string>
-    <string name="header_hasil">Hasil Analisa</string>
-    <string name="komplikasi">Komplikasi : %1$s\n</string>
-    <string name="hasil_analisis">Haii %1$s setelah dianalisa dengan info yang kamu berikan dibawah ini:\nJenis Kulit : %2$s\n%3$sKita punya saran untuk bahan kandungan di skincare yang cocok dengan deskripsi yang kamu berikan. Karena kamu jenis kulitnya %2$s, maka perhatikan bahan-bahan dibawah ini yaa.\n\nDirekomendasikan memiliki bahan ini:\n%4$s\n\nJauhkan yang memiliki bahan ini:\n%5$s</string>
 
-<!--    Output Cek Komplikasi-->
+    <!--    Cek Komplikasi-->
     <string name="rekomendasi_komplikasi_komedo_putih">Bahan rekomendasi untuk kulit normal</string>
     <string name="rekomendasi_komplikasi_komedo_hitam">Bahan rekomendasi untuk kulit kering</string>
     <string name="rekomendasi_komplikasi_jerawat">Bahan rekomendasi untuk kulit berminyak</string>
     <string name="rekomendasi_komplikasi_keriput">Bahan rekomendasi untuk kulit kombinasi</string>
 
+    <!--    Output Analisa-->
+    <string name="header_hasil">Hasil Analisa</string>
+    <string name="sapaan">Halo %s 😊</string>
+    <string name="hasil_analisis">\nSetelah dianalisa dengan info yang kamu berikan dibawah ini:</string>
+    <string name="jenis_kulit_label">Jenis Kulit: </string>
+    <string name="komplikasi_label">Komplikasi: </string>
+    <string name="rekomendasi_jenis_kulit">\nRekomendasi bahan skincare sesuai jenis kulit:</string>
+    <string name="hindari_jenis_kulit">\nHindari bahan skincare sesuai jenis kulit:</string>
+    <string name="rekomendasi_komplikasi">\nRekomendasi bahan skincare sesuai komplikasi kulit:</string>
 </resources>
