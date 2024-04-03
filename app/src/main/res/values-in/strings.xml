@@ -1,26 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">GlowGuide</string>
-
-    <!--    Navigasi-->
+    <string name="app_name">GlowGuide</string>
     <string name="info">Tentang Aplikasi</string>
     <string name="page1">Analisa Kulitmu</string>
     <string name="page2">Rekomendasi Produk</string>
     <string name="page3">Rutinitas Perawatan</string>
     <string name="kembali">Kembali</string>
-
-    <!--    MainScreen-->
     <string name="intro">Selamat datang di GlowGuide😊! Teman setia Anda dalam perjalanan kecantikan dan perawatan kulit. Mulai perjalanan kecantikan Anda sekarang dan temukan kilau alami yang Anda impikan!</string>
     <string name="image_jenis_kulit">Analisa Kulitmu</string>
     <string name="image_product_skincare">Rekomendasi Produk</string>
     <string name="image_skincare_routine">Rutinitas Perawatan</string>
-
-    <!--    About Screen-->
     <string name="info_aplikasi">Aplikasi GlowGuide merupakan aplikasi yang membantu pengguna dalam mengetahui jenis kulit pengguna, memberikan saran tentang bahan-bahan yang cocok dan yang sebaiknya dihindari dalam Skincare, merekomendasi produk-produk yang sesuai dan memberikan rutinitas perawatan kulit yang optimal berdasarkan jenis kulit. Sehingga fitur utamanya sebagai berikut:\n\n1. Analisa Kulitmu\n2. Rekomendasi Produk\n3. Rutinitas Perawatan</string>
-    <string name="copyright" translatable="false">Copyright © 2024 Chaeza Fauzyyah Inayah.\nAll rights reserved.</string>
-
-    <!--    Jenis Kulit-->
-    <string name="intro_jenis_kulit">Ingin mengetahui Perawatan Kulit apa yang tepat untuk jenis kulit kamu? Coba sekarang!</string>
-    <string name="nama">Nama Anda</string>
+    <string name="intro_jenis_kulit">Copyright © 2024 Chaeza Fauzyyah Inayah.</string>
+    <string name="nama">All rights reserved.</string>
     <string name="jenis_kulit">Jenis Kulit Anda</string>
     <string name="kulit_normal">Kulit Normal</string>
     <string name="kulit_kering">Kulit Kering</string>
@@ -31,40 +23,22 @@
     <string name="komedo_hitam">Komedo Hitam</string>
     <string name="jerawat">Jerawat</string>
     <string name="keriput">Keriput</string>
-
-    <!--    Fungsional di Jenis Kulit-->
     <string name="input_invalid">Tidak boleh kosong</string>
     <string name="kulit_invalid">Harus memiilih jenis kulit</string>
     <string name="cek_hasil">Cek Hasil</string>
     <string name="reset">Hapus</string>
-
-    <!--    Cek Kulit-->
     <string name="rekomendasi_kulit_normal">1. Exfoliating acids dan enzymes\n2. Retinoids\n3. Vitamin C\n4. Hyaluronic acid\n5. Polyglutamic Acid</string>
     <string name="rekomendasi_kulit_kering">1. Alpha hydroxy acids (AHAs)\n2. Enzyme exfoliants\n3. Retinoids\n4. Vitamin C\n5. Hyaluronic acid dan Polyglutamic acid\n6. Ceramides</string>
-    <string name="rekomendasi_kulit_berminyak" translatable="false">1. Salicylic acid\n2. Niacinamide\n3. Azelaic acid\n4. Vitamin C\n5. Retinoids\n6. Benzoyl peroxide</string>
     <string name="rekomendasi_kulit_kombinasi">1. Exfoliating acids\n2. Retinoids\n3. Vitamin C\n4. Enzyme exfoliants\n5. Hyaluronic acid dan Polyglutamic acid\n6. Niacinamide</string>
-    <string name="hindari_kulit_normal" translatable="false">1. SD Alcohol 40\n2. Sodium\n3. Ammonium Lauryl Sulfate\n4. Petrolatum\n5. Isopropyl Myristate\n6. Isopropyl Palmitate</string>
-    <string name="hindari_kulit_kering" translatable="false">1. Salicylic Acid\n2. Parabens\n3. Benzoyl Peroxide\n4. Surfactants</string>
-    <string name="hindari_kulit_berminyak" translatable="false">1. Occlusive emollients\n2. Isopropyl myristate\n3. SD Alcohol 40\n4. Isopropyl Alcohol\n5. Sodium lauryl</string>
-    <string name="hindari_kulit_kombinasi" translatable="false">1. Parabens\n2. Alpha Hydroxy Acid\n3. Formaldehyde\n4. Toluene</string>
-
-    <!--    Cek Komplikasi-->
-    <string name="rekomendasi_komplikasi_komedo_putih" translatable="false">1. benzoyl peroxide\n2. salicylic acid\n3. alpha-hydroxy acids</string>
-    <string name="rekomendasi_komplikasi_komedo_hitam" translatable="false">1. benzoyl peroxide\n2. salicylic acid\n3. Glycolic Acid\n4. Dioic Acid</string>
-    <string name="rekomendasi_komplikasi_jerawat" translatable="false">1. Benzoyl peroxide\n2. Retinoids\n3. Salicylic acid\n4. Alpha Hydroxy Acids\n5. Hydroquinone\n6. Azelaic Acid </string>
     <string name="rekomendasi_komplikasi_keriput">1. Exfoliating acids\n2. Vitamin C\n3. Hyaluronic acid dan Polyglutamic acid\n4. Peptides\n5. Niacinamide</string>
-
-    <!--    Output Analisa-->
     <string name="header_hasil">Hasil Analisa</string>
     <string name="sapaan">Halo %s 😊</string>
     <string name="hasil_analisis">\nSetelah dianalisa dengan info yang kamu berikan dibawah ini:</string>
-    <string name="jenis_kulit_label">Jenis Kulit: </string>
-    <string name="komplikasi_label">Komplikasi: </string>
+    <string name="jenis_kulit_label">"Jenis Kulit: "</string>
+    <string name="komplikasi_label">"Komplikasi: "</string>
     <string name="rekomendasi_jenis_kulit">\nRekomendasi bahan skincare sesuai jenis kulit:</string>
     <string name="hindari_jenis_kulit">\nHindari bahan skincare sesuai jenis kulit:</string>
     <string name="rekomendasi_komplikasi">\nRekomendasi bahan skincare sesuai komplikasi kulit:</string>
-
-    <!--    Rekomendasi-->
     <string name="intro_rekomendasi">GlowGuide memberikan informasi tentang produk-produk apa saja yang sedang direkomendasi!</string>
     <string name="sabun_muka">1. Sabun Wajah</string>
     <string name="sabun_muka_deskripsi">Kandungan di dalamnya ada oat, heartleaf, collagen, dan real green tea leaves yang dapat membersihkan wajahmu dari kotoran, debu polusi udara, dan residu dari makeup yang masih tersisa di wajahmu usai beraktivitas di luar ruangan. Walaupun dapat deep cleanse wajahmu, sabun cuci muka ini nggak akan memberikan efek seperti wajah ketarik, melainkan wajahmu jadi terasa lebih lembut dan terjaga kelembapannya! Face wash ini juga cocok untuk kamu yang memiliki jenis kulit sensitif dan acne prone ya.</string>
@@ -74,8 +48,6 @@
     <string name="serum_muka_deskripsi">Lagi cari serum yang bisa membantu kulitmu tampak cerah dan meredakan bekas jerawat? Kamu harus jadikan Avoskin Your Skin Bae Serum Alpha Arbutin 3% + Grapeseed ke dalam wish list skincare yang patut kamu coba! Serum ini menggabungkan active ingredients Alpha Arbutin 3% dan ekstrak dari grapeseed. Dengan kombinasi keduanya, kamu bisa achieve kulit wajah yang tampak cerah. Ditambah lagi grapeseed yang kaya antioksidan juga memiliki peran untuk menjaga sel kulit wajah jadi terasa dan terlihat lebih sehat!</string>
     <string name="masker_muka">4. Masker Wajah</string>
     <string name="masker_muka_deskripsi">Rutin menggunakan masker eksfoliasi dapat membantu untuk mengangkat sel-sel kulit mati, sehingga kulitmu akan terasa lebih bersih. Salah satu masker eksfoliasi yang digemari oleh banyak orang adalah Whitelab Mugwort Pore Clarifying Mask. Dengan kandungan tea tree, masker ini akan mengontrol minyak berlebih yang hadir di wajahmu dan membantu untuk mengurangi kemunculan jerawat juga, bila kamu menggunakannya secara rutin. Di tambah, ada kandungan BHA yang berfungsi untuk mengangkat sel kulit mati!</string>
-
-    <!--    Rutinitas-->
     <string name="intro_rutinitas">Untuk tetap menjaga kulit sehat, segar dan berkilau. Kamu harus ingat Rutinitas sehari-hari ini ya!</string>
     <string name="judul_rutinitas">Urutan Pemakaian Skincare</string>
     <string name="skincare_pagi">Rangkaian skincare pagi</string>
