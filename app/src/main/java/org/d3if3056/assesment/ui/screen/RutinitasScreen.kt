@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
@@ -68,13 +69,41 @@ fun RutinitasScreen(navController: NavHostController) {
             )
         }
     ) { padding ->
-        Column {
+        Column(modifier = Modifier
+            .padding(padding)
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             Text(
                 text = stringResource(id = R.string.intro_rutinitas),
-                modifier = Modifier
-                    .padding(padding)
-                    .padding(16.dp),
+                modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Justify
+            )
+            Text(
+                text = stringResource(id = R.string.judul_rutinitas),
+                modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = stringResource(id = R.string.skincare_pagi),
+                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Text(
+                text = stringResource(id = R.string.urutan_pagi),
+                modifier = Modifier.fillMaxWidth()
+            )
+            Text(
+                text = stringResource(id = R.string.skincare_malam),
+                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Text(
+                text = stringResource(id = R.string.urutan_malam),
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
