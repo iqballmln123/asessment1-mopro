@@ -24,5 +24,11 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         composable(route = Screen.JenisKulit.route){
             JenisKulitScreen(navController)
         }
+        composable(route = Screen.Rekomendasi.route){
+
+        }
+        composable(route = Screen.Rutinitas.route){
+
+        }
     }
 }
