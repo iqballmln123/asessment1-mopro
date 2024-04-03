@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -87,24 +88,27 @@ fun MainScreen(navController: NavHostController) {
             )
         }
     ) { padding ->
-        ScreenContent(navController,Modifier.padding(padding))
+        ScreenContent(navController, Modifier.padding(padding))
     }
 }
 
 @Composable
-fun getDataMain(): List<MainImage>{
+fun getDataMain(): List<MainImage> {
     return listOf(
         MainImage(stringResource(id = R.string.image_jenis_kulit), R.drawable.jenis_kulit),
-        MainImage(stringResource(id = R.string.image_product_skincare), R.drawable.product_skincare),
+        MainImage(
+            stringResource(id = R.string.image_product_skincare),
+            R.drawable.product_skincare
+        ),
         MainImage(stringResource(id = R.string.image_skincare_routine), R.drawable.skincare_routine)
     )
 }
 
 @Composable
-fun ScreenContent(navController: NavHostController,modifier: Modifier) {
+fun ScreenContent(navController: NavHostController, modifier: Modifier) {
     val data = getDataMain()
     val configuration = LocalConfiguration.current
-    val firstTwoImages = data.take(2)
+    val listdata = data.take(3)
 
     Column(
         modifier = modifier
@@ -112,7 +116,7 @@ fun ScreenContent(navController: NavHostController,modifier: Modifier) {
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
-    ){
+    ) {
         Text(
             text = stringResource(id = R.string.intro),
             style = MaterialTheme.typography.bodyLarge.copy(
@@ -122,37 +126,40 @@ fun ScreenContent(navController: NavHostController,modifier: Modifier) {
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Justify
         )
-        LazyRow(
-            modifier = Modifier.padding(top = 12.dp)
-        ) {
-            items(firstTwoImages) {image ->
-                ButtonComponent(image, navController)
-            }
-        }
         if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            LazyRow(
+                modifier = Modifier.padding(top = 12.dp, start = 2.dp)
+            ) {
+                items(listdata) { image ->
+                    ButtonComponent(image, navController)
+                }
+            }
+        } else {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                ButtonComponent(data[2], navController)
+                listdata.forEach { image ->
+                    ButtonComponent(image, navController)
+                }
             }
         }
     }
 }
 
 @Composable
-fun ButtonComponent(mainImage: MainImage, navController: NavHostController){
+fun ButtonComponent(mainImage: MainImage, navController: NavHostController) {
     OutlinedButton(
         onClick = {
-                  when(mainImage){
-                      is MainImage -> {
-                          when (mainImage.imageResId){
-                              R.drawable.jenis_kulit -> navController.navigate(Screen.JenisKulit.route)
-                              R.drawable.product_skincare -> navController.navigate(Screen.Rekomendasi.route)
-                              R.drawable.skincare_routine -> navController.navigate(Screen.Rutinitas.route)
-                          }
-                      }
-                  }
+            when (mainImage) {
+                is MainImage -> {
+                    when (mainImage.imageResId) {
+                        R.drawable.jenis_kulit -> navController.navigate(Screen.JenisKulit.route)
+                        R.drawable.product_skincare -> navController.navigate(Screen.Rekomendasi.route)
+                        R.drawable.skincare_routine -> navController.navigate(Screen.Rutinitas.route)
+                    }
+                }
+            }
         },
         modifier = Modifier
             .height(170.dp)
@@ -176,7 +183,7 @@ fun ButtonComponent(mainImage: MainImage, navController: NavHostController){
             Text(
                 text = mainImage.nama,
                 textAlign = TextAlign.Center,
-                maxLines = 2
+                maxLines = 3
             )
         }
     }
