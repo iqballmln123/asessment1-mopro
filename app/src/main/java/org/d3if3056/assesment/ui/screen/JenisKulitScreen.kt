@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
@@ -99,6 +100,8 @@ fun JenisKulitScreen(navController: NavHostController) {
 @Composable
 fun JenisContent(modifier: Modifier) {
     var nama by remember { mutableStateOf("") }
+    var namaError by remember { mutableStateOf(false) }
+    
     var expanded by remember { mutableStateOf(false) }
     var selectedItemIndex by remember { mutableIntStateOf(0) }
     var hasilAnalisis by remember { mutableStateOf("") }
@@ -110,6 +113,8 @@ fun JenisContent(modifier: Modifier) {
         stringResource(id = R.string.kulit_berminyak),
         stringResource(id = R.string.kulit_kombinasi)
     )
+    var jenisKulitError by remember { mutableStateOf(false) }
+            
     val komplikasiKulit = listOf(
         stringResource(id = R.string.komedo_putih),
         stringResource(id = R.string.komedo_hitam),
@@ -149,6 +154,9 @@ fun JenisContent(modifier: Modifier) {
             value = nama,
             onValueChange = { nama = it },
             label = { Text(text = stringResource(id = R.string.nama)) },
+            isError = namaError,
+            supportingText = { ErrorHint(isError = namaError)},
+            trailingIcon = { IconPicker(isError = namaError, unit = "")},
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -165,9 +173,16 @@ fun JenisContent(modifier: Modifier) {
                 value = jenisKulit[selectedItemIndex],
                 onValueChange = { },
                 label = { Text(text = stringResource(id = R.string.jenis_kulit)) },
+                isError = jenisKulitError,
+                supportingText = {ErrorHint(isError = jenisKulitError)},
                 readOnly = true,
                 trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    if (jenisKulitError){
+                        IconPicker(isError = true, unit = "")
+                    } else {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    }
+
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -226,6 +241,10 @@ fun JenisContent(modifier: Modifier) {
         }
         Button(
             onClick = {
+                namaError = (nama == "")
+                jenisKulitError = (selectedItemIndex == 0)
+                if (namaError || jenisKulitError) return@Button
+
                       cekHasil(nama, jenisKulit[selectedItemIndex],komplikasiKulit,checked){
                           hasil -> hasilAnalisis = hasil
                       }
@@ -253,6 +272,21 @@ fun JenisContent(modifier: Modifier) {
     }
 }
 
+@Composable
+fun IconPicker(isError: Boolean, unit: String) {
+    if (isError){
+        Icon(imageVector = Icons.Filled.Warning, contentDescription = null)
+    } else {
+        Text(text = unit)
+    }
+}
+
+@Composable
+fun ErrorHint(isError: Boolean){
+    if (isError){
+        Text(text = stringResource(id = R.string.input_invalid))
+    }
+}
 private fun cekHasil(nama: String, jenisKulit: String, komplikasiKulit: List<String>, checked: List<Boolean>, onHasilAnalisisReady: (String) -> Unit){
     val komplikasiTerpilih = mutableListOf<String>()
 

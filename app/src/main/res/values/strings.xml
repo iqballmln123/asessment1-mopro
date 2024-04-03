@@ -30,7 +30,7 @@
     <string name="keriput">Keriput</string>
 
 <!--    Fungsional di Jenis Kulit-->
-    <string name="nama_invalid">Tidak boleh kosong</string>
+    <string name="input_invalid">Tidak boleh kosong</string>
     <string name="kulit_invalid">Harus memiilih jenis kulit</string>
     <string name="cek_hasil">Cek Hasil</string>
 
