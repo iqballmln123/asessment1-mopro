@@ -43,6 +43,7 @@
     <string name="hindari_kulit_kering">Bahan yang harus dihindari untuk kulit kering</string>
     <string name="hindari_kulit_berminyak">Bahan yang harus dihindari untuk kulit berminyak</string>
     <string name="hindari_kulit_kombinasi">Bahan yang harus dihindari untuk kulit kombinasi</string>
+    <string name="header_hasil">Hasil Analisa</string>
     <string name="komplikasi">Komplikasi : %1$s\n</string>
     <string name="hasil_analisis">Haii %1$s setelah dianalisa dengan info yang kamu berikan dibawah ini:\nJenis Kulit : %2$s\n%3$sKita punya saran untuk bahan kandungan di skincare yang cocok dengan deskripsi yang kamu berikan. Karena kamu jenis kulitnya %2$s, maka perhatikan bahan-bahan dibawah ini yaa.\n\nDirekomendasikan memiliki bahan ini:\n%4$s\n\nJauhkan yang memiliki bahan ini:\n%5$s</string>
 

@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -235,10 +236,18 @@ fun JenisContent(modifier: Modifier) {
             Text(text = stringResource(id = R.string.cek_hasil))
         }
         if (hasilAnalisis.isNotEmpty()){
+            Divider(
+                modifier = Modifier.padding(vertical = 8.dp),
+                thickness = 1.dp
+            )
+            Text(
+                text = stringResource(id = R.string.header_hasil),
+                style = MaterialTheme.typography.titleLarge
+            )
             Text(
                 text = hasilAnalisis,
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Justify
             )
         }
     }
