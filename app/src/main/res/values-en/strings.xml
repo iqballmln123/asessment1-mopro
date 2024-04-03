@@ -7,12 +7,10 @@
     <string name="page3">Care Routine</string>
     <string name="kembali">Back</string>
     <string name="intro">Welcome to GlowGuide😊! Your faithful companion on your beauty and skincare journey. Start your beauty journey now and discover the natural glow you\'ve been dreaming of!</string>
-    <string name="intro">Selamat datang di GlowGuide😊! Teman setia Anda dalam perjalanan kecantikan dan perawatan kulit. Mulai perjalanan kecantikan Anda sekarang dan temukan kilau alami yang Anda impikan!</string>
     <string name="image_jenis_kulit">Analyze your skin</string>
     <string name="image_product_skincare">Product Recommendations</string>
     <string name="image_skincare_routine">Care Routines</string>
     <string name="info_aplikasi">GlowGuide app is an app that helps users to know their skin type, provides advice on suitable and avoidable ingredients in skincare, recommends suitable products and provides an optimal skincare routine based on skin type. So the main features are as follows:\n\n1. Analyze Your Skin\n2. Product Recommendation\n3. Care Routine</string>
-    <string name="info_aplikasi">GlowGuide app is an app that helps users to know their skin type, provides advice on suitable and avoidable ingredients in skincare, recommends suitable products and provides an optimal skincare routine based on skin type. So the main features are as follows:  1. Analyze Your Skin 2. Product Recommendation 3. Care Routine</string>
     <string name="intro_jenis_kulit">Want to know what skincare is right for your skin type? Try it now!</string>
     <string name="nama">Your Name</string>
     <string name="jenis_kulit">Your Skin Type</string>
@@ -33,7 +31,6 @@
     <string name="rekomendasi_kulit_kering">1. Alpha hydroxy acids (AHAs)\n2. Enzyme exfoliants\n3. Retinoids\n4. Vitamin C\n5. Hyaluronic acid and Polyglutamic acid\n6. Ceramides</string>
     <string name="rekomendasi_kulit_kombinasi">1. Exfoliating acids\n2. Retinoids\n3. Vitamin C\n4. Enzyme exfoliants\n5. Hyaluronic acid and Polyglutamic acid\n6. Niacinamide</string>
     <string name="rekomendasi_komplikasi_keriput">1. Exfoliating acids\n2. Vitamin C\n3. Hyaluronic acid and Polyglutamic acid\n4. Peptides\n5. Niacinamide</string>
-    <string name="header_hasil">Analysis Result</string>
     <string name="header_hasil">Analysis Result</string>
     <string name="sapaan">Hallo %s 😊</string>
     <string name="hasil_analisis">\nAfter analyzing with the info you provided below:</string>
