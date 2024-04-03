@@ -1,8 +1,13 @@
 package org.d3if3056.assesment.ui.screen
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -15,10 +20,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.Hyphens
+import androidx.compose.ui.text.style.LineBreak
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3056.assesment.R
@@ -58,13 +68,16 @@ fun RekomendasiScreen(navController: NavHostController) {
             )
         }
     ) { padding ->
-        RekomendasiContent(Modifier.padding(padding))
+        Column {
+            Text(
+                text = stringResource(id = R.string.intro_rekomendasi),
+                modifier = Modifier
+                    .padding(padding)
+                    .padding(16.dp),
+                textAlign = TextAlign.Justify
+            )
+        }
     }
-}
-
-@Composable
-fun RekomendasiContent (modifier: Modifier){
-
 }
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
