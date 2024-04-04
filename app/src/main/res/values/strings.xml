@@ -82,4 +82,8 @@
     <string name="urutan_pagi">1. Pembersih wajah\n2. Toner\n3. Serum\n4. Moisturizer\n5. Sunscreen</string>
     <string name="skincare_malam">Rangkaian skincare malam</string>
     <string name="urutan_malam">1. Double Cleansing\n2. Toner\n3. Serum\n4. Moisturizer\n5. Krim Mata\n6. Retinol</string>
+
+    <!--    Intent-->
+    <string name="bagikan">Bagikan</string>
+    <string name="bagikan_template">Nama: %1$s\nJenis Kulit: %2$s\nKomplikasi Kulit: %3$s\nRekomendasi bahan skincare:\n%4$s\nHindari bahan skincare:\n%5$s</string>
 </resources>

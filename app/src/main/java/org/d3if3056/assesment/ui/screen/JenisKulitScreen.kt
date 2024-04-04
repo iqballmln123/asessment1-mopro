@@ -46,6 +46,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -133,6 +134,7 @@ fun JenisContent(modifier: Modifier) {
         }
     }
 
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -288,17 +290,14 @@ fun JenisContent(modifier: Modifier) {
                     text = stringResource(id = R.string.sapaan, nama),
                     textAlign = TextAlign.Justify
                 )
-
                 Text(
                     text = stringResource(id = R.string.hasil_analisis, hasilAnalisis),
                     textAlign = TextAlign.Justify
                 )
-
                 Text(
                     text = stringResource(id = R.string.jenis_kulit_label) + jenisKulit[selectedItemIndex],
                     textAlign = TextAlign.Justify
                 )
-
                 if (checked.any { it }) {
                     val selectedComplications = mutableListOf<String>()
                     for ((index, isSelected) in checked.withIndex()) {
@@ -338,7 +337,6 @@ fun JenisContent(modifier: Modifier) {
                     stringResource(id = R.string.kulit_berminyak) -> Text(text = stringResource(id = R.string.hindari_kulit_berminyak))
                     stringResource(id = R.string.kulit_kombinasi) -> Text(text = stringResource(id = R.string.hindari_kulit_kombinasi))
                 }
-
                 for ((index, complication) in komplikasiKulit.withIndex()) {
                     if (checked[index]) {
                         Text(
@@ -364,6 +362,45 @@ fun JenisContent(modifier: Modifier) {
                         }
                     }
                 }
+                Button(
+                    onClick = {
+                        val selectedComplications = mutableListOf<String>()
+                        for ((index, isSelected) in checked.withIndex()) {
+                            if (isSelected) {
+                                selectedComplications.add(komplikasiKulit[index])
+                            }
+                        }
+                        val selectedComplicationsString = selectedComplications.joinToString(", ")
+
+                        val message = context.getString(
+                            R.string.bagikan_template,
+                            nama.uppercase(),
+                            jenisKulit[selectedItemIndex],
+                            selectedComplicationsString,
+                            when (jenisKulit[selectedItemIndex]) {
+                                context.getString(R.string.kulit_normal) -> context.getString(R.string.rekomendasi_kulit_normal)
+                                context.getString(R.string.kulit_kering) -> context.getString(R.string.rekomendasi_kulit_kering)
+                                context.getString(R.string.kulit_berminyak) -> context.getString(R.string.rekomendasi_kulit_berminyak)
+                                context.getString(R.string.kulit_kombinasi) -> context.getString(R.string.rekomendasi_kulit_kombinasi)
+                                else -> ""
+                            },
+                            context.getString(
+                                when (jenisKulit[selectedItemIndex]) {
+                                    context.getString(R.string.kulit_normal) -> R.string.hindari_kulit_normal
+                                    context.getString(R.string.kulit_kering) -> R.string.hindari_kulit_kering
+                                    context.getString(R.string.kulit_berminyak) -> R.string.hindari_kulit_berminyak
+                                    context.getString(R.string.kulit_kombinasi) -> R.string.hindari_kulit_kombinasi
+                                    else -> ""
+                                } as Int
+                            )
+                        )
+                        shareData(context, message)
+                    },
+                    modifier = Modifier.padding(top = 8.dp),
+                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp),
+                ) {
+                    Text(text = stringResource(id = R.string.bagikan))
+                }
             }
         }
     }
@@ -385,6 +422,15 @@ fun ErrorHint(isError: Boolean) {
     }
 }
 
+private fun shareData(context: Context, message: String) {
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, message)
+    }
+    if (shareIntent.resolveActivity(context.packageManager) != null) {
+        context.startActivity(shareIntent)
+    }
+}
 
 
 @Preview(showBackground = true)
