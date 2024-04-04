@@ -396,8 +396,8 @@ fun JenisContent(modifier: Modifier) {
                         )
                         shareData(context, message)
                     },
-                    modifier = Modifier.padding(top = 8.dp),
-                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp),
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp),
+                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
                 ) {
                     Text(text = stringResource(id = R.string.bagikan))
                 }
