@@ -111,6 +111,9 @@ fun JenisContent(modifier: Modifier) {
     var hasilAnalisis by rememberSaveable { mutableStateOf("") }
     var showAnalysisResult by rememberSaveable { mutableStateOf(false) }
     var jenisKulitError by rememberSaveable { mutableStateOf(false) }
+    var inputNama by rememberSaveable { mutableStateOf("") }
+    var seleksiJenisKulit by rememberSaveable { mutableStateOf("")}
+    var seleksiKomplikasi by rememberSaveable { mutableStateOf(false) }
 
     val jenisKulit = listOf(
         stringResource(id = R.string.jenis_kulit),
@@ -266,6 +269,11 @@ fun JenisContent(modifier: Modifier) {
                     if (namaError || jenisKulitError) return@Button
 
                     showAnalysisResult = true
+
+                    inputNama = nama
+                    seleksiJenisKulit = jenisKulit[selectedItemIndex]
+                    seleksiKomplikasi = checked.any { it }
+
                 },
                 modifier = Modifier.padding(top = 8.dp),
                 contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
@@ -287,7 +295,7 @@ fun JenisContent(modifier: Modifier) {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = stringResource(id = R.string.sapaan, nama),
+                    text = stringResource(id = R.string.sapaan, inputNama),
                     textAlign = TextAlign.Justify
                 )
                 Text(
@@ -295,11 +303,12 @@ fun JenisContent(modifier: Modifier) {
                     textAlign = TextAlign.Justify
                 )
                 Text(
-                    text = stringResource(id = R.string.jenis_kulit_label) + jenisKulit[selectedItemIndex],
+                    text = stringResource(id = R.string.jenis_kulit_label) + seleksiJenisKulit,
                     textAlign = TextAlign.Justify
                 )
-                if (checked.any { it }) {
+                if (seleksiKomplikasi) {
                     val selectedComplications = mutableListOf<String>()
+
                     for ((index, isSelected) in checked.withIndex()) {
                         if (isSelected) {
                             selectedComplications.add(komplikasiKulit[index])
@@ -320,7 +329,7 @@ fun JenisContent(modifier: Modifier) {
                     text = stringResource(id = R.string.rekomendasi_jenis_kulit),
                     textAlign = TextAlign.Justify
                 )
-                when (jenisKulit[selectedItemIndex]) {
+                when (seleksiJenisKulit) {
                     stringResource(id = R.string.kulit_normal) -> Text(text = stringResource(id = R.string.rekomendasi_kulit_normal))
                     stringResource(id = R.string.kulit_kering) -> Text(text = stringResource(id = R.string.rekomendasi_kulit_kering))
                     stringResource(id = R.string.kulit_berminyak) -> Text(text = stringResource(id = R.string.rekomendasi_kulit_berminyak))
@@ -331,7 +340,7 @@ fun JenisContent(modifier: Modifier) {
                     text = stringResource(id = R.string.hindari_jenis_kulit),
                     textAlign = TextAlign.Justify
                 )
-                when (jenisKulit[selectedItemIndex]) {
+                when (seleksiJenisKulit) {
                     stringResource(id = R.string.kulit_normal) -> Text(text = stringResource(id = R.string.hindari_kulit_normal))
                     stringResource(id = R.string.kulit_kering) -> Text(text = stringResource(id = R.string.hindari_kulit_kering))
                     stringResource(id = R.string.kulit_berminyak) -> Text(text = stringResource(id = R.string.hindari_kulit_berminyak))
@@ -396,7 +405,9 @@ fun JenisContent(modifier: Modifier) {
                         )
                         shareData(context, message)
                     },
-                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 8.dp),
                     contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
                 ) {
                     Text(text = stringResource(id = R.string.bagikan))
