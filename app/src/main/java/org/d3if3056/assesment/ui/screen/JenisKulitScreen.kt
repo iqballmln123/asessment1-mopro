@@ -1,5 +1,7 @@
 package org.d3if3056.assesment.ui.screen
 
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +41,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -99,14 +102,14 @@ fun JenisKulitScreen(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JenisContent(modifier: Modifier) {
-    var nama by remember { mutableStateOf("") }
-    var namaError by remember { mutableStateOf(false) }
+    var nama by rememberSaveable { mutableStateOf("") }
+    var namaError by rememberSaveable { mutableStateOf(false) }
 
-    var expanded by remember { mutableStateOf(false) }
-    var selectedItemIndex by remember { mutableIntStateOf(0) }
-    var hasilAnalisis by remember { mutableStateOf("") }
-    var showAnalysisResult by remember { mutableStateOf(false) }
-    var jenisKulitError by remember { mutableStateOf(false) }
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
+    var hasilAnalisis by rememberSaveable { mutableStateOf("") }
+    var showAnalysisResult by rememberSaveable { mutableStateOf(false) }
+    var jenisKulitError by rememberSaveable { mutableStateOf(false) }
 
     val jenisKulit = listOf(
         stringResource(id = R.string.jenis_kulit),
@@ -381,6 +384,8 @@ fun ErrorHint(isError: Boolean) {
         Text(text = stringResource(id = R.string.input_invalid))
     }
 }
+
+
 
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
