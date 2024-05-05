@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -94,12 +92,17 @@ fun MainScreen(navController: NavHostController) {
 @Composable
 fun getDataMain(): List<MainImage> {
     return listOf(
-        MainImage(stringResource(id = R.string.image_jenis_kulit), R.drawable.jenis_kulit),
+        MainImage(
+            stringResource(id = R.string.image_jenis_kulit),
+            R.drawable.jenis_kulit),
         MainImage(
             stringResource(id = R.string.image_product_skincare),
             R.drawable.product_skincare
         ),
-        MainImage(stringResource(id = R.string.image_skincare_routine), R.drawable.skincare_routine)
+        MainImage(
+            stringResource(id = R.string.image_skincare_routine),
+            R.drawable.skincare_routine
+        )
     )
 }
 
@@ -107,7 +110,9 @@ fun getDataMain(): List<MainImage> {
 fun ScreenContent(navController: NavHostController, modifier: Modifier) {
     val data = getDataMain()
     val configuration = LocalConfiguration.current
-    val listdata = data.take(3)
+
+    val numColoms = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 4
+    val chunkedData = data.chunked(numColoms)
 
     Column(
         modifier = modifier
@@ -125,21 +130,13 @@ fun ScreenContent(navController: NavHostController, modifier: Modifier) {
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Justify
         )
-        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            LazyRow(
-                modifier = Modifier.padding(top = 12.dp, start = 2.dp)
-            ) {
-                items(listdata) { image ->
-                    ButtonComponent(image, navController)
-                }
-            }
-        } else {
-            Row(
+        chunkedData.forEach{ rowItems ->
+            Row (
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                listdata.forEach { image ->
-                    ButtonComponent(image, navController)
+            ){
+                rowItems.forEach{image ->
+                    ButtonComponent(mainImage = image, navController = navController)
                 }
             }
         }
