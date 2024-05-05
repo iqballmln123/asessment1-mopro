@@ -94,7 +94,12 @@ fun getDataMain(): List<MainImage> {
     return listOf(
         MainImage(
             stringResource(id = R.string.image_jenis_kulit),
-            R.drawable.jenis_kulit),
+            R.drawable.jenis_kulit
+        ),
+        MainImage(
+            stringResource(id = R.string.image_jurnal_kulit),
+            R.drawable.journal
+        ),
         MainImage(
             stringResource(id = R.string.image_product_skincare),
             R.drawable.product_skincare
