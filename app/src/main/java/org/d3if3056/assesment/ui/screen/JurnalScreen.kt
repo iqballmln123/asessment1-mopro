@@ -1,11 +1,15 @@
 package org.d3if3056.assesment.ui.screen
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,9 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3056.assesment.R
+import org.d3if3056.assesment.model.Jurnal
 import org.d3if3056.assesment.ui.theme.AssesmentTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,7 +70,30 @@ fun JurnalScreen(navController: NavHostController){
 
 @Composable
 fun JurnalContent(modifier: Modifier){
+    val viewModel: JurnalViewModel = viewModel()
+    val data = viewModel.data
+    
+    LazyColumn(
+        modifier = modifier.fillMaxSize()
+    ){
+        items(data){
+            ListItem(jurnal = it)
+            Divider()
+        }
+    }
+}
 
+@Composable
+fun ListItem(jurnal: Jurnal){
+    Column {
+        Text(text = jurnal.kondisi_kulit)
+        Text(text = jurnal.rutinitas)
+        Text(text = jurnal.moods)
+        Text(text = jurnal.notes)
+        Text(text = jurnal.steps)
+        Text(text = jurnal.extra_steps)
+        Text(text = jurnal.tanggal)
+    }
 }
 
 @Preview(showBackground = true)
