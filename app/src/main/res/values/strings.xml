@@ -88,4 +88,10 @@
     <!--    Intent-->
     <string name="bagikan">Bagikan</string>
     <string name="bagikan_template">Nama: %1$s\nJenis Kulit: %2$s\nKomplikasi Kulit: %3$s\nRekomendasi bahan skincare:\n%4$s\nHindari bahan skincare:\n%5$s</string>
+
+    <!--    Jurnal-->
+    <string name="list_kosong">Belum ada data</string>
+    <string name="x_diklik">%1$s diklik!</string>
+    <string name="tambah_jurnal">Tambah Jurnal</string>
+    <string name="tambah_error">Belum bisa tambah catatan.</string>
 </resources>
