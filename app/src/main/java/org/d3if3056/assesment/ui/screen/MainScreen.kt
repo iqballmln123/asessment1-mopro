@@ -156,6 +156,7 @@ fun ButtonComponent(mainImage: MainImage, navController: NavHostController) {
                 is MainImage -> {
                     when (mainImage.imageResId) {
                         R.drawable.jenis_kulit -> navController.navigate(Screen.JenisKulit.route)
+                        R.drawable.journal -> navController.navigate(Screen.Jurnal.route)
                         R.drawable.product_skincare -> navController.navigate(Screen.Rekomendasi.route)
                         R.drawable.skincare_routine -> navController.navigate(Screen.Rutinitas.route)
                     }
