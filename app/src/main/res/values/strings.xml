@@ -94,4 +94,17 @@
     <string name="x_diklik">%1$s diklik!</string>
     <string name="tambah_jurnal">Tambah Jurnal</string>
     <string name="tambah_error">Belum bisa tambah catatan.</string>
+    <string name="judul_kondisi">Saat ini kulitku terasa</string>
+    <string name="opsi_rutinitas">Rutinitas yang dilakukan saat ini</string>
+    <string name="opsi_moods">Hari ini aku merasa</string>
+    <string name="notes">Note lainnya</string>
+    <string name="steps">Langkah Skincare</string>
+    <string name="extra_steps">Langkah Skincare Tambahan</string>
+    <string name="pagi">Pagi</string>
+    <string name="malam">Malam</string>
+    <string name="jelek">Jelek</string>
+    <string name="buruk">Buruk</string>
+    <string name="dapat_diterima">Dapat diterima</string>
+    <string name="baik">Baik</string>
+    <string name="luar_biasa">Luar biasa</string>
 </resources>
