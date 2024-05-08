@@ -1,6 +1,7 @@
 package org.d3if3056.assesment.ui.screen
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -18,6 +20,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +28,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -36,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -58,7 +63,6 @@ fun DetailScreen(navController: NavHostController) {
     var rutinitas by remember { mutableStateOf("") }
     var moods by remember { mutableStateOf("") }
     var notes by remember { mutableStateOf("") }
-    var steps by remember { mutableStateOf("") }
     var extraSteps by remember { mutableStateOf("") }
 
     val rutinitasOptions = listOf(
@@ -66,12 +70,12 @@ fun DetailScreen(navController: NavHostController) {
         stringResource(R.string.malam)
     )
 
-    val moodsOptions = listOf(
-        stringResource(R.string.jelek),
-        stringResource(R.string.buruk),
-        stringResource(R.string.dapat_diterima),
+    val moodsOptions = arrayOf(
+        stringResource(R.string.luar_biasa),
         stringResource(R.string.baik),
-        stringResource(R.string.luar_biasa)
+        stringResource(R.string.dapat_diterima),
+        stringResource(R.string.buruk),
+        stringResource(R.string.jelek),
     )
 
     val stepsOption = listOf(
@@ -108,42 +112,45 @@ fun DetailScreen(navController: NavHostController) {
             )
         }
     ) { padding ->
-        FormCatatan(
-            title = judulRutinitas,
-            onTitleChange = {judulRutinitas = it},
-            rutinitas = rutinitas,
-            onRutinitasChange = {rutinitas = it},
-            moods = moods,
-            onMoodsChange = {moods = it},
-            notes = notes,
-            onNotesChange = {notes = it},
-            steps = steps,
-            onStepsChange = {steps = it},
-            extraSteps = extraSteps,
-            onExtraStepsChange = {extraSteps = it},
-            rutinitasOptions = rutinitasOptions,
-            moodsOptions = moodsOptions,
-            stepsOptions = stepsOption,
-            modifier = Modifier.padding(padding)
-        )
+        LazyColumn(modifier = Modifier.padding(2.dp)
+        ) {
+            item {
+                FormCatatan(
+                    title = judulRutinitas,
+                    onTitleChange = { judulRutinitas = it },
+                    rutinitas = rutinitas,
+                    onRutinitasChange = { rutinitas = it },
+                    onMoodsChange = { moods = it },
+                    notes = notes,
+                    onNotesChange = { notes = it },
+                    extraSteps = extraSteps,
+                    onExtraStepsChange = { extraSteps = it },
+                    rutinitasOptions = rutinitasOptions,
+                    moodsOptions = moodsOptions,
+                    stepsOptions = stepsOption,
+                    modifier = Modifier.padding(padding)
+                )
+            }
+        }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormCatatan(
     title: String, onTitleChange: (String) -> Unit,
     rutinitas: String, onRutinitasChange: (String) -> Unit,
-    moods: String, onMoodsChange: (String) -> Unit,
+    onMoodsChange: (String) -> Unit,
     notes: String, onNotesChange: (String) -> Unit,
-    steps: String, onStepsChange: (String) -> Unit,
-    extraSteps: String, onExtraStepsChange: (String) -> Unit,
-    rutinitasOptions: List<String>,
-    moodsOptions: List<String>,
-    stepsOptions: List<String>,
+    extraSteps: String,
+    onExtraStepsChange: (String) -> Unit, rutinitasOptions: List<String>,
+    moodsOptions: Array<String>, stepsOptions: List<String>,
     modifier: Modifier
 ){
+    val context = LocalContext.current
     var expanded by rememberSaveable { mutableStateOf(false) }
+    var selectedItemIndex by remember{ mutableStateOf(0) }
 
     val (selectedSteps, setSelectedSteps) = remember { mutableStateOf(emptyList<String>()) }
 
@@ -166,7 +173,6 @@ fun FormCatatan(
         )
         Box(modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp)
             .border(
                 width = 1.dp,
                 color = Color.Gray,
@@ -203,43 +209,41 @@ fun FormCatatan(
                 }
             }
         }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
-            .border(
-                width = 1.dp,
-                color = Color.Gray,
-                shape = RoundedCornerShape(4.dp)
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded },
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value = moodsOptions[selectedItemIndex],
+                onValueChange = onMoodsChange,
+                label = { Text(text = stringResource(id = R.string.opsi_moods)) },
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor()
             )
-        ){
-            ExposedDropdownMenuBox(
+            ExposedDropdownMenu(
                 expanded = expanded,
-                onExpandedChange = {expanded = it},
-                modifier = Modifier.fillMaxWidth()
+                onDismissRequest = { expanded = false }
             ) {
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = moods,
-                        textAlign = TextAlign.Justify
+                moodsOptions.forEachIndexed { index, item ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = item,
+                                modifier = Modifier.padding(start = 4.dp),
+                                fontWeight = if (index == selectedItemIndex) FontWeight.Bold else null
+                            )
+                        },
+                        onClick = {
+                            selectedItemIndex = index
+                            expanded = false
+                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+                        }
                     )
-                    moodsOptions.forEach {option ->
-                        DropdownMenuItem(
-                            text = {
-                                   Text(
-                                       text = option,
-                                       fontWeight = if (option == moods) FontWeight.Bold else null
-                                   )
-                            },
-                            onClick = {
-                                onMoodsChange(option)
-                                expanded = false
-                            }
-                        )
-                    }
                 }
             }
         }
@@ -261,6 +265,7 @@ fun FormCatatan(
                 color = Color.Gray,
                 shape = RoundedCornerShape(4.dp)
             )
+            .padding(8.dp)
         ){
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
