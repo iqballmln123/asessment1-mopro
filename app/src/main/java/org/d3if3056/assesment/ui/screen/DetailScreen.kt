@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
@@ -28,7 +29,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -79,8 +79,14 @@ fun DetailScreen(navController: NavHostController) {
     )
 
     val stepsOption = listOf(
-        "Cleanser", "Toner", "Spot Treatment", "Serums",
-        "Eye Cream", "Moisturizer", "Face Oil", "Sunscreen"
+        stringResource(R.string.cleanser),
+        stringResource(R.string.toner),
+        stringResource(R.string.spot_treatment),
+        stringResource(R.string.serums),
+        stringResource(R.string.eye_cream),
+        stringResource(R.string.moisturizer),
+        stringResource(R.string.face_oil),
+        stringResource(R.string.sunscreen)
     )
 
     Scaffold(
@@ -104,7 +110,17 @@ fun DetailScreen(navController: NavHostController) {
                     ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = stringResource(id = R.string.kembali)
+                            contentDescription = stringResource(id = R.string.kembali),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Check,
+                            contentDescription = stringResource(id = R.string.simpan),
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 },

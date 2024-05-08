@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -69,9 +70,19 @@ fun JurnalScreen(navController: NavHostController){
                     ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = stringResource(id = R.string.kembali)
+                            contentDescription = stringResource(id = R.string.kembali),
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
+                },
+                actions = {
+                          IconButton(onClick = { /*TODO*/ }) {
+                              Icon(
+                                  imageVector = Icons.Outlined.Check,
+                                  contentDescription = stringResource(id = R.string.simpan),
+                                  tint = MaterialTheme.colorScheme.primary
+                              )
+                          }
                 },
                 scrollBehavior = scrollBehavior
             )
