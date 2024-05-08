@@ -40,13 +40,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3056.assesment.R
 import org.d3if3056.assesment.model.Jurnal
+import org.d3if3056.assesment.navigation.Screen
 import org.d3if3056.assesment.ui.theme.AssesmentTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JurnalScreen(navController: NavHostController){
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -79,7 +79,7 @@ fun JurnalScreen(navController: NavHostController){
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    Toast.makeText(context, R.string.tambah_error, Toast.LENGTH_SHORT).show()
+                    navController.navigate(Screen.FormBaru.route)
                 }
             ) {
                 Icon(

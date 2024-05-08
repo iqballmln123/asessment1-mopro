@@ -145,6 +145,8 @@ fun FormCatatan(
 ){
     var expanded by rememberSaveable { mutableStateOf(false) }
 
+    val (selectedSteps, setSelectedSteps) = remember { mutableStateOf(emptyList<String>()) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -274,13 +276,17 @@ fun FormCatatan(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Checkbox(
-                            checked = steps == option,
-                            onCheckedChange = { onStepsChange(option) },
-                            modifier = Modifier.alignByBaseline()
+                            checked = selectedSteps.contains(option),
+                            onCheckedChange = { isChecked ->
+                                if (isChecked) {
+                                    setSelectedSteps(selectedSteps + option)
+                                } else {
+                                    setSelectedSteps(selectedSteps - option)
+                                }
+                            },
+                            modifier = Modifier.padding(horizontal = 16.dp)
                         )
-                        Text(
-                            text = option
-                        )
+                        Text(text = option)
                     }
                 }
             }
