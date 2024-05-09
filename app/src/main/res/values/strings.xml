@@ -117,4 +117,6 @@
     <string name="face_oil">Face Oil</string>
     <string name="sunscreen">Sunscreen</string>
     <string name="edit_jurnal">Ubah Jurnal</string>
+    <string name="show_less">tunjukan lebih sedikit</string>
+    <string name="show_more">tunjukan lebih banyak</string>
 </resources>
