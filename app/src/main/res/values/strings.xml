@@ -119,4 +119,5 @@
     <string name="edit_jurnal">Ubah Jurnal</string>
     <string name="show_less">tunjukan lebih sedikit</string>
     <string name="show_more">tunjukan lebih banyak</string>
+    <string name="invalid">Kondisi kulit, rutinitas, notes, moods dan steps tidak boleh kosong</string>
 </resources>

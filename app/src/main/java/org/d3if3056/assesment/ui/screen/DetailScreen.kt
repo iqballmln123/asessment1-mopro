@@ -33,6 +33,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -53,23 +54,28 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3056.assesment.R
+import org.d3if3056.assesment.database.JurnalDb
 import org.d3if3056.assesment.ui.theme.AssesmentTheme
+import org.d3if3056.assesment.util.ViewModelFactory
 
 const val KEY_ID_JURNAL = "idJurnal"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(navController: NavHostController, id: Long? = null) {
+    val context = LocalContext.current
+    val db = JurnalDb.getInstance(context)
+    val factory = ViewModelFactory(db.dao)
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val viewModel: DetailViewModel = viewModel()
+    val viewModel: DetailViewModel = viewModel(factory = factory)
 
-    var kondisi_kulit by remember{ mutableStateOf("") }
+    var kondisi_kulit by remember { mutableStateOf("") }
     var rutinitas by remember { mutableStateOf("") }
     var moods by remember { mutableStateOf("") }
     var notes by remember { mutableStateOf("") }
     var steps by remember { mutableStateOf("") }
     var extraSteps by remember { mutableStateOf("") }
-    var selectedMoodIndex by remember { mutableStateOf(0) }
+    var selectedMoodIndex by remember { mutableIntStateOf(0) }
 
     val rutinitasOptions = listOf(
         stringResource(R.string.pagi),
@@ -95,7 +101,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
         stringResource(R.string.sunscreen)
     )
 
-    if (id != null){
+    if (id != null) {
         val data = viewModel.getJurnal(id)
         kondisi_kulit = data.kondisi_kulit
         rutinitas = data.rutinitas
@@ -141,7 +147,17 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        if (kondisi_kulit=="" || rutinitas=="" ) {
+                            Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
+                            return@IconButton
+                        }
+                        if (id == null) {
+                            viewModel.insert( kondisi_kulit, rutinitas,moods,notes,steps,extraSteps
+                            )
+                        }
+                        navController.popBackStack()
+                    }) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
                             contentDescription = stringResource(id = R.string.simpan),
@@ -153,7 +169,8 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             )
         }
     ) { padding ->
-        LazyColumn(modifier = Modifier.padding(2.dp)
+        LazyColumn(
+            modifier = Modifier.padding(2.dp)
         ) {
             item {
                 FormCatatan(
@@ -195,7 +212,7 @@ fun FormCatatan(
     stepsOptions: List<String>,
     selectedSteps: List<String>, onSelectedStepsChange: (List<String>) -> Unit,
     modifier: Modifier
-){
+) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     Column(
@@ -207,7 +224,7 @@ fun FormCatatan(
         OutlinedTextField(
             value = title,
             onValueChange = { onTitleChange(it) },
-            label = { Text(text = stringResource(id = R.string.judul_kondisi))},
+            label = { Text(text = stringResource(id = R.string.judul_kondisi)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Words,
@@ -215,14 +232,15 @@ fun FormCatatan(
             ),
             modifier = Modifier.fillMaxWidth()
         )
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = Color.Gray,
-                shape = RoundedCornerShape(4.dp)
-            )
-        ){
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = Color.Gray,
+                    shape = RoundedCornerShape(4.dp)
+                )
+        ) {
             Column {
                 Text(
                     text = stringResource(id = R.string.opsi_rutinitas),
@@ -236,7 +254,7 @@ fun FormCatatan(
                     horizontalArrangement = Arrangement.spacedBy(76.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    rutinitasOptions.forEach{ option ->
+                    rutinitasOptions.forEach { option ->
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -293,7 +311,7 @@ fun FormCatatan(
         OutlinedTextField(
             value = notes,
             onValueChange = { onNotesChange(it) },
-            label = { Text(text = stringResource(id = R.string.notes))},
+            label = { Text(text = stringResource(id = R.string.notes)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Words,
@@ -301,15 +319,16 @@ fun FormCatatan(
             ),
             modifier = Modifier.fillMaxWidth()
         )
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = Color.Gray,
-                shape = RoundedCornerShape(4.dp)
-            )
-            .padding(8.dp)
-        ){
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = Color.Gray,
+                    shape = RoundedCornerShape(4.dp)
+                )
+                .padding(8.dp)
+        ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp)
@@ -347,8 +366,8 @@ fun FormCatatan(
         }
         OutlinedTextField(
             value = extraSteps,
-            onValueChange = { onExtraStepsChange(it)},
-            label = { Text(text = stringResource(id = R.string.extra_steps))},
+            onValueChange = { onExtraStepsChange(it) },
+            label = { Text(text = stringResource(id = R.string.extra_steps)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Words,
