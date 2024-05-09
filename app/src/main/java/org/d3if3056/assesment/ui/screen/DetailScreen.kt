@@ -15,9 +15,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -78,12 +80,14 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
     var extraSteps by remember { mutableStateOf("") }
     var selectedMoodIndex by remember { mutableIntStateOf(0) }
 
+    var showDialog by remember { mutableStateOf(false) }
+
     val rutinitasOptions = listOf(
         stringResource(R.string.pagi),
         stringResource(R.string.malam)
     )
 
-    val moodsOptions = arrayOf(
+    val moodsOptions = listOf(
         stringResource(R.string.luar_biasa),
         stringResource(R.string.baik),
         stringResource(R.string.dapat_diterima),
@@ -172,6 +176,19 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
+                    if (id != null){
+                        DeleteAction {
+                            showDialog = true
+                        }
+                        DisplayAlertDialog(
+                            openDialog = showDialog,
+                            onDismissRequest = { showDialog = false }
+                        ) {
+                            showDialog = false
+                            viewModel.delete(id)
+                            navController.popBackStack()
+                        }
+                    }
                 },
                 scrollBehavior = scrollBehavior
             )
@@ -215,7 +232,7 @@ fun FormCatatan(
     notes: String, onNotesChange: (String) -> Unit,
     extraSteps: String, onExtraStepsChange: (String) -> Unit,
     rutinitasOptions: List<String>,
-    moodsOptions: Array<String>,
+    moodsOptions: List<String>,
     selectedMoodIndex: Int, onSelectedMoodIndexChange: (Int) -> Unit,
     stepsOptions: List<String>,
     selectedSteps: List<String>, onSelectedStepsChange: (List<String>) -> Unit,
@@ -282,12 +299,11 @@ fun FormCatatan(
         ExposedDropdownMenuBox(
             expanded = expanded,
             onExpandedChange = { expanded = !expanded },
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
                 value = moodsOptions[selectedMoodIndex],
-                onValueChange = onMoodsChange,
+                onValueChange = {},
                 label = { Text(text = stringResource(id = R.string.opsi_moods)) },
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -309,6 +325,7 @@ fun FormCatatan(
                             )
                         },
                         onClick = {
+                            onMoodsChange(item)
                             onSelectedMoodIndexChange(index)
                             expanded = false
                         }
@@ -383,6 +400,33 @@ fun FormCatatan(
             ),
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+@Composable
+fun DeleteAction(delete: () -> Unit){
+    var expanded by remember { mutableStateOf(false) }
+
+    IconButton(onClick = { expanded = true }) {
+        Icon(
+            imageVector = Icons.Filled.MoreVert,
+            contentDescription = stringResource(id = R.string.lainnya),
+            tint = MaterialTheme.colorScheme.primary
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = {
+                    Text(text = stringResource(id = R.string.reset))
+                       },
+                onClick = {
+                    expanded = false
+                    delete()
+                }
+            )
+        }
     }
 }
 
