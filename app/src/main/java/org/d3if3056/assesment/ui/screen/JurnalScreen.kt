@@ -65,13 +65,15 @@ import org.d3if3056.assesment.database.JurnalDb
 import org.d3if3056.assesment.model.Jurnal
 import org.d3if3056.assesment.navigation.Screen
 import org.d3if3056.assesment.ui.theme.AssesmentTheme
+import org.d3if3056.assesment.util.SettingsDataStore
 import org.d3if3056.assesment.util.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JurnalScreen(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    var showList by remember { mutableStateOf(true) }
+    val dataStore = SettingsDataStore(LocalContext.current)
+    val showList by dataStore.layoutFlow.collectAsState(true)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -101,7 +103,9 @@ fun JurnalScreen(navController: NavHostController) {
                 },
                 actions = {
                     IconButton(onClick = {
-                        showList = !showList
+                        CoroutineScope(Dispatchers.IO).launch{
+                            dataStore.saveLayout(!showList)
+                        }
                     }) {
                         Icon(
                             painter = painterResource(
