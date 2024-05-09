@@ -20,4 +20,7 @@ interface JurnalDao {
 
     @Query("SELECT * FROM jurnal WHERE id = :id")
     suspend fun getJurnalById(id: Long): Jurnal?
+
+    @Query("DELETE FROM jurnal WHERE id = :id")
+    suspend fun deleteById(id: Long)
 }

@@ -9,6 +9,11 @@
     <string name="page4">Jurnal Skincare</string>
     <string name="kembali">Kembali</string>
     <string name="simpan">Simpan</string>
+    <string name="pesan_hapus">Hapus jurnal ini?</string>
+    <string name="tombol_hapus">Hapus</string>
+    <string name="tombol_batal">Batal</string>
+    <string name="list">Tampilan list</string>
+    <string name="grid">Tampilan grid</string>
 
     <!--    MainScreen-->
     <string name="intro">Selamat datang di GlowGuide😊! Teman setia Anda dalam perjalanan kecantikan dan perawatan kulit. Mulai perjalanan kecantikan Anda sekarang dan temukan kilau alami yang Anda impikan!</string>
@@ -40,6 +45,7 @@
     <string name="kulit_invalid">Harus memiilih jenis kulit</string>
     <string name="cek_hasil">Cek Hasil</string>
     <string name="reset">Hapus</string>
+    <string name="lainnya">Opsi Lainnya</string>
 
     <!--    Cek Kulit-->
     <string name="rekomendasi_kulit_normal">1. Exfoliating acids dan enzymes\n2. Retinoids\n3. Vitamin C\n4. Hyaluronic acid\n5. Polyglutamic Acid</string>
@@ -105,7 +111,7 @@
     <string name="malam">Malam</string>
     <string name="jelek">Jelek</string>
     <string name="buruk">Buruk</string>
-    <string name="dapat_diterima">Dapat diterima</string>
+    <string name="dapat_diterima">Biasa saja</string>
     <string name="baik">Baik</string>
     <string name="luar_biasa">Luar biasa</string>
     <string name="cleanser">Cleanser</string>
