@@ -192,7 +192,7 @@ fun ListItem(jurnal: Jurnal, onClick: () -> Unit) {
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = "Mood: " + jurnal.moods,
+                            text = jurnal.moods,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )

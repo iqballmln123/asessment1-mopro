@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -101,8 +102,9 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
         stringResource(R.string.sunscreen)
     )
 
-    if (id != null) {
-        val data = viewModel.getJurnal(id)
+    LaunchedEffect(true) {
+        if (id == null) return@LaunchedEffect
+        val data = viewModel.getJurnal(id) ?: return@LaunchedEffect
         kondisi_kulit = data.kondisi_kulit
         rutinitas = data.rutinitas
         moods = data.moods
@@ -111,6 +113,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
         extraSteps = data.extra_steps
         val moodIndex = moodsOptions.indexOf(data.moods)
         selectedMoodIndex = if (moodIndex != -1) moodIndex else 0
+
     }
 
     Scaffold(
@@ -148,12 +151,17 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                 },
                 actions = {
                     IconButton(onClick = {
-                        if (kondisi_kulit=="" || rutinitas=="" ) {
+                        if (kondisi_kulit == "" || rutinitas == "") {
                             Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
                             return@IconButton
                         }
                         if (id == null) {
-                            viewModel.insert( kondisi_kulit, rutinitas,moods,notes,steps,extraSteps
+                            viewModel.insert(
+                                kondisi_kulit, rutinitas, moods, notes, steps, extraSteps
+                            )
+                        } else {
+                            viewModel.update(
+                                id, kondisi_kulit, rutinitas, moods, notes, steps, extraSteps
                             )
                         }
                         navController.popBackStack()

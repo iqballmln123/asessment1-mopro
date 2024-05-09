@@ -17,4 +17,7 @@ interface JurnalDao {
 
     @Query("SELECT * FROM jurnal ORDER BY tanggal DESC")
     fun getJurnal(): Flow<List<Jurnal>>
+
+    @Query("SELECT * FROM jurnal WHERE id = :id")
+    suspend fun getJurnalById(id: Long): Jurnal?
 }

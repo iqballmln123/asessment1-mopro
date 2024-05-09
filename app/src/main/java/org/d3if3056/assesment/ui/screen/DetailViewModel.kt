@@ -27,16 +27,23 @@ class DetailViewModel(private val dao: JurnalDao) : ViewModel() {
             dao.insert(jurnal)
         }
     }
-    fun getJurnal(id: Long): Jurnal{
-        return Jurnal(
-            id,
-            "Kemerah-merahan",
-            "Pagi",
-            "Luar Biasa",
-            "none",
-            "Cleanser",
-            "none",
-            "2024-05-$id"
+    suspend fun getJurnal(id: Long): Jurnal? {
+        return dao.getJurnalById(id)
+    }
+
+    fun update(id: Long, kondisi_kulit: String, rutinitas: String, moods: String, notes: String, steps: String, extra_steps: String){
+        val jurnal = Jurnal(
+            id = id,
+            kondisi_kulit = kondisi_kulit,
+            rutinitas = rutinitas,
+            moods = moods,
+            notes = notes,
+            steps = steps,
+            extra_steps = extra_steps,
+            tanggal = formatter.format(Date())
         )
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.update(jurnal)
+        }
     }
 }
