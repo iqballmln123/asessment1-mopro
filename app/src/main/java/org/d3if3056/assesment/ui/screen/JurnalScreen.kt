@@ -50,7 +50,7 @@ import org.d3if3056.assesment.ui.theme.AssesmentTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun JurnalScreen(navController: NavHostController){
+fun JurnalScreen(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -101,11 +101,11 @@ fun JurnalScreen(navController: NavHostController){
 }
 
 @Composable
-fun JurnalContent(modifier: Modifier, navController: NavHostController){
+fun JurnalContent(modifier: Modifier, navController: NavHostController) {
     val viewModel: JurnalViewModel = viewModel()
     val data = viewModel.data
 
-    if (data.isEmpty()){
+    if (data.isEmpty()) {
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -123,7 +123,7 @@ fun JurnalContent(modifier: Modifier, navController: NavHostController){
             contentPadding = PaddingValues(bottom = 84.dp)
         ) {
             items(data) {
-                ListItem(jurnal = it){
+                ListItem(jurnal = it) {
                     navController.navigate(Screen.FormUbah.withId(it.id))
                 }
             }
@@ -132,7 +132,7 @@ fun JurnalContent(modifier: Modifier, navController: NavHostController){
 }
 
 @Composable
-fun ListItem(jurnal: Jurnal, onClick:() -> Unit){
+fun ListItem(jurnal: Jurnal, onClick: () -> Unit) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     Card(
@@ -148,23 +148,35 @@ fun ListItem(jurnal: Jurnal, onClick:() -> Unit){
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier
-                .weight(1f)
-                .padding(12.dp)
-            ){
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(14.dp)
+            ) {
                 Text(
                     text = jurnal.kondisi_kulit,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.ExtraBold
-                    ),
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+                Text(
+                    text = jurnal.rutinitas,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(text = jurnal.tanggal)
                 if (expanded) {
                     Column(
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.padding(start = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
+                        Text(
+                            text = "Mood: " + jurnal.moods,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                         Text(
                             text = jurnal.notes,
                             maxLines = 2,
@@ -179,23 +191,6 @@ fun ListItem(jurnal: Jurnal, onClick:() -> Unit){
                             text = jurnal.extra_steps,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                    Column(
-                        modifier = Modifier.padding(start = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = jurnal.rutinitas,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = jurnal.moods,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            fontWeight = FontWeight.ExtraLight
                         )
                     }
                 }
