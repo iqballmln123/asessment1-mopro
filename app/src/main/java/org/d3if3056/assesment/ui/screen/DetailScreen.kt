@@ -49,6 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3056.assesment.R
@@ -60,12 +61,15 @@ const val KEY_ID_JURNAL = "idJurnal"
 @Composable
 fun DetailScreen(navController: NavHostController, id: Long? = null) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val viewModel: DetailViewModel = viewModel()
 
-    var judulRutinitas by remember{ mutableStateOf("") }
+    var kondisi_kulit by remember{ mutableStateOf("") }
     var rutinitas by remember { mutableStateOf("") }
     var moods by remember { mutableStateOf("") }
     var notes by remember { mutableStateOf("") }
+    var steps by remember { mutableStateOf("") }
     var extraSteps by remember { mutableStateOf("") }
+    var selectedMoodIndex by remember { mutableStateOf(0) }
 
     val rutinitasOptions = listOf(
         stringResource(R.string.pagi),
@@ -90,6 +94,18 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
         stringResource(R.string.face_oil),
         stringResource(R.string.sunscreen)
     )
+
+    if (id != null){
+        val data = viewModel.getJurnal(id)
+        kondisi_kulit = data.kondisi_kulit
+        rutinitas = data.rutinitas
+        moods = data.moods
+        notes = data.notes
+        steps = data.steps
+        extraSteps = data.extra_steps
+        val moodIndex = moodsOptions.indexOf(data.moods)
+        selectedMoodIndex = if (moodIndex != -1) moodIndex else 0
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -141,8 +157,8 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
         ) {
             item {
                 FormCatatan(
-                    title = judulRutinitas,
-                    onTitleChange = { judulRutinitas = it },
+                    title = kondisi_kulit,
+                    onTitleChange = { kondisi_kulit = it },
                     rutinitas = rutinitas,
                     onRutinitasChange = { rutinitas = it },
                     onMoodsChange = { moods = it },
@@ -152,7 +168,11 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     onExtraStepsChange = { extraSteps = it },
                     rutinitasOptions = rutinitasOptions,
                     moodsOptions = moodsOptions,
+                    selectedMoodIndex = selectedMoodIndex,
+                    onSelectedMoodIndexChange = { selectedMoodIndex = it },
                     stepsOptions = stepsOption,
+                    selectedSteps = steps.split(","),
+                    onSelectedStepsChange = { steps = it.joinToString(",") },
                     modifier = Modifier.padding(padding)
                 )
             }
@@ -168,16 +188,15 @@ fun FormCatatan(
     rutinitas: String, onRutinitasChange: (String) -> Unit,
     onMoodsChange: (String) -> Unit,
     notes: String, onNotesChange: (String) -> Unit,
-    extraSteps: String,
-    onExtraStepsChange: (String) -> Unit, rutinitasOptions: List<String>,
-    moodsOptions: Array<String>, stepsOptions: List<String>,
+    extraSteps: String, onExtraStepsChange: (String) -> Unit,
+    rutinitasOptions: List<String>,
+    moodsOptions: Array<String>,
+    selectedMoodIndex: Int, onSelectedMoodIndexChange: (Int) -> Unit,
+    stepsOptions: List<String>,
+    selectedSteps: List<String>, onSelectedStepsChange: (List<String>) -> Unit,
     modifier: Modifier
 ){
-    val context = LocalContext.current
     var expanded by rememberSaveable { mutableStateOf(false) }
-    var selectedItemIndex by remember{ mutableStateOf(0) }
-
-    val (selectedSteps, setSelectedSteps) = remember { mutableStateOf(emptyList<String>()) }
 
     Column(
         modifier = modifier
@@ -241,7 +260,7 @@ fun FormCatatan(
                 .fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = moodsOptions[selectedItemIndex],
+                value = moodsOptions[selectedMoodIndex],
                 onValueChange = onMoodsChange,
                 label = { Text(text = stringResource(id = R.string.opsi_moods)) },
                 readOnly = true,
@@ -260,13 +279,12 @@ fun FormCatatan(
                             Text(
                                 text = item,
                                 modifier = Modifier.padding(start = 4.dp),
-                                fontWeight = if (index == selectedItemIndex) FontWeight.Bold else null
+                                fontWeight = if (index == selectedMoodIndex) FontWeight.Bold else null,
                             )
                         },
                         onClick = {
-                            selectedItemIndex = index
+                            onSelectedMoodIndexChange(index)
                             expanded = false
-                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
                         }
                     )
                 }
@@ -308,11 +326,17 @@ fun FormCatatan(
                         Checkbox(
                             checked = selectedSteps.contains(option),
                             onCheckedChange = { isChecked ->
-                                if (isChecked) {
-                                    setSelectedSteps(selectedSteps + option)
+                                val newSteps = if (isChecked) {
+                                    selectedSteps + option
                                 } else {
-                                    setSelectedSteps(selectedSteps - option)
+                                    selectedSteps - option
                                 }
+                                onSelectedStepsChange(newSteps)
+//                                if (isChecked) {
+//                                    setSelectedSteps(selectedSteps + option)
+//                                } else {
+//                                    setSelectedSteps(selectedSteps - option)
+//                                }
                             },
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
