@@ -54,9 +54,11 @@ import androidx.navigation.compose.rememberNavController
 import org.d3if3056.assesment.R
 import org.d3if3056.assesment.ui.theme.AssesmentTheme
 
+const val KEY_ID_JURNAL = "idJurnal"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(navController: NavHostController) {
+fun DetailScreen(navController: NavHostController, id: Long? = null) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     var judulRutinitas by remember{ mutableStateOf("") }
@@ -98,11 +100,18 @@ fun DetailScreen(navController: NavHostController) {
                     titleContentColor = MaterialTheme.colorScheme.primary
                 ),
                 title = {
-                    Text(
-                        text = stringResource(id = R.string.tambah_jurnal),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    if (id == null)
+                        Text(
+                            text = stringResource(id = R.string.tambah_jurnal),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    else
+                        Text(
+                            text = stringResource(id = R.string.edit_jurnal),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                 },
                 navigationIcon = {
                     IconButton(
