@@ -29,24 +29,30 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3056.assesment.R
+import org.d3if3056.assesment.database.JurnalDao
+import org.d3if3056.assesment.database.JurnalDb
 import org.d3if3056.assesment.model.Jurnal
 import org.d3if3056.assesment.navigation.Screen
 import org.d3if3056.assesment.ui.theme.AssesmentTheme
+import org.d3if3056.assesment.util.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,8 +108,11 @@ fun JurnalScreen(navController: NavHostController) {
 
 @Composable
 fun JurnalContent(modifier: Modifier, navController: NavHostController) {
-    val viewModel: JurnalViewModel = viewModel()
-    val data = viewModel.data
+    val context = LocalContext.current
+    val db = JurnalDb.getInstance(context)
+    val factory = ViewModelFactory(db.dao)
+    val viewModel: JurnalViewModel = viewModel(factory = factory)
+    val data by viewModel.data.collectAsState()
 
     if (data.isEmpty()) {
         Column(
