@@ -281,11 +281,11 @@ fun GridItem(jurnal: Jurnal, onClick: () -> Unit){
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(8.dp)
             .clickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
-        ),
-        border = BorderStroke(1.dp, Color.Gray)
+        )
     ) {
         Column(
             modifier = Modifier.padding(8.dp),
