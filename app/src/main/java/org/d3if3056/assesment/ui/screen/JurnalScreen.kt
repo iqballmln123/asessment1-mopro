@@ -100,7 +100,7 @@ fun JurnalScreen(navController: NavHostController) {
                 },
                 actions = {
                     IconButton(onClick = {
-                        CoroutineScope(Dispatchers.IO).launch{
+                        CoroutineScope(Dispatchers.IO).launch {
                             dataStore.saveLayout(!showList)
                         }
                     }) {
@@ -134,12 +134,12 @@ fun JurnalScreen(navController: NavHostController) {
             }
         }
     ) { padding ->
-        JurnalContent(showList ,Modifier.padding(padding), navController)
+        JurnalContent(showList, Modifier.padding(padding), navController)
     }
 }
 
 @Composable
-fun JurnalContent(showList: Boolean,modifier: Modifier, navController: NavHostController) {
+fun JurnalContent(showList: Boolean, modifier: Modifier, navController: NavHostController) {
     val context = LocalContext.current
     val db = JurnalDb.getInstance(context)
     val factory = ViewModelFactory(db.dao)
@@ -183,8 +183,8 @@ fun JurnalContent(showList: Boolean,modifier: Modifier, navController: NavHostCo
                 verticalItemSpacing = 8.dp,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 84.dp)
-            ){
-                items(data){
+            ) {
+                items(data) {
                     GridItem(jurnal = it) {
                         navController.navigate(Screen.FormUbah.withId(it.id))
                     }
@@ -230,32 +230,33 @@ fun ListItem(jurnal: Jurnal, onClick: () -> Unit) {
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(text = jurnal.tanggal)
-                if (expanded) {
-                    Column(
-                        modifier = Modifier.padding(start = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = jurnal.moods,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                        Text(
-                            text = jurnal.notes,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        Text(
-                            text = jurnal.steps,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        Text(
-                            text = jurnal.extra_steps,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
+                if (expanded && jurnal.moods.isNotEmpty()) {
+                    Text(
+                        text = jurnal.moods,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+                if (expanded && jurnal.notes.isNotEmpty()) {
+                    Text(
+                        text = jurnal.notes,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                if (expanded && jurnal.steps.isNotEmpty()) {
+                    Text(
+                        text = jurnal.steps,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                if (expanded && jurnal.extra_steps.isNotEmpty()) {
+                    Text(
+                        text = jurnal.extra_steps,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
             IconButton(
@@ -274,8 +275,9 @@ fun ListItem(jurnal: Jurnal, onClick: () -> Unit) {
     }
 }
 
+
 @Composable
-fun GridItem(jurnal: Jurnal, onClick: () -> Unit){
+fun GridItem(jurnal: Jurnal, onClick: () -> Unit) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     Card(
@@ -305,32 +307,33 @@ fun GridItem(jurnal: Jurnal, onClick: () -> Unit){
                 overflow = TextOverflow.Ellipsis
             )
             Text(text = jurnal.tanggal)
-            if (expanded) {
-                Column(
-                    modifier = Modifier.padding(start = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        text = jurnal.moods,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Text(
-                        text = jurnal.notes,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = jurnal.steps,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = jurnal.extra_steps,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
+            if (expanded && jurnal.moods.isNotEmpty()) {
+                Text(
+                    text = jurnal.moods,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            if (expanded && jurnal.notes.isNotEmpty()) {
+                Text(
+                    text = jurnal.notes,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            if (expanded && jurnal.steps.isNotEmpty()) {
+                Text(
+                    text = jurnal.steps,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            if (expanded && jurnal.extra_steps.isNotEmpty()) {
+                Text(
+                    text = jurnal.extra_steps,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
         IconButton(
