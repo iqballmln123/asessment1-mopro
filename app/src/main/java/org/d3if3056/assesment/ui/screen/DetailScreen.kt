@@ -72,6 +72,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val viewModel: DetailViewModel = viewModel(factory = factory)
 
+
     var kondisi_kulit by remember { mutableStateOf("") }
     var rutinitas by remember { mutableStateOf("") }
     var moods by remember { mutableStateOf("") }
@@ -213,8 +214,10 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     selectedMoodIndex = selectedMoodIndex,
                     onSelectedMoodIndexChange = { selectedMoodIndex = it },
                     stepsOptions = stepsOption,
-                    selectedSteps = steps.split(","),
-                    onSelectedStepsChange = { steps = it.joinToString(",") },
+                    selectedSteps = steps.split(",").map { it.trim() },
+                    onSelectedStepsChange = { selectedSteps ->
+                        steps = selectedSteps.joinToString(separator = ",")
+                    },
                     modifier = Modifier.padding(padding)
                 )
             }
