@@ -286,27 +286,26 @@ fun ListItem(skincare: Skincare) {
         }
     }
 }
-    private suspend fun signIn(
-        context: Context,
-        dataStore: UserDataStore
-    ) {
-        val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(BuildConfig.API_KEY)
-            .build()
+private suspend fun signIn(
+    context: Context,
+    dataStore: UserDataStore
+) {
+    val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+        .setFilterByAuthorizedAccounts(false)
+        .setServerClientId(BuildConfig.API_KEY)
+        .build()
+    val request: GetCredentialRequest = GetCredentialRequest.Builder()
+        .addCredentialOption(googleIdOption)
+        .build()
 
-        val request: GetCredentialRequest = GetCredentialRequest.Builder()
-            .addCredentialOption(googleIdOption)
-            .build()
-
-        try {
-            val credentialManager = CredentialManager.create(context)
-            val result = credentialManager.getCredential(context, request)
-            handleSignIn(result, dataStore)
-        } catch (e: GetCredentialException) {
-            Log.e("SIGN-IN", "Error: ${e.errorMessage}")
-        }
+    try {
+        val credentialManager = CredentialManager.create(context)
+        val result = credentialManager.getCredential(context, request)
+        handleSignIn(result, dataStore)
+    } catch (e: GetCredentialException) {
+        Log.e("SIGN-IN", "Error: ${e.errorMessage}")
     }
+}
 
 private suspend fun handleSignIn(
     result: GetCredentialResponse,
@@ -315,8 +314,7 @@ private suspend fun handleSignIn(
     val credential = result.credential
 
     if (credential is CustomCredential &&
-        credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-        ) {
+        credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
             try {
                 val googleId = GoogleIdTokenCredential.createFrom(credential.data)
 //            Log.d("SIGN-IN", "User email: ${googleId.id}")

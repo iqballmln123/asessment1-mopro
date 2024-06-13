@@ -39,7 +39,7 @@ object SkincareApi {
     }
 
     fun getSkincareUrl(imageId: String): String{
-        return "$BASE_URL$imageId.jpg"
+        return "${BASE_URL}image.php?id=$imageId"
     }
 }
 
