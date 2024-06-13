@@ -8,6 +8,7 @@ import android.graphics.ImageDecoder
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -97,14 +98,14 @@ fun KoleksiScreen(navController: NavHostController) {
     val user by dataStore.userFlow.collectAsState(initial = User())
 
     var showDialog by remember { mutableStateOf(false) }
-    var showHewanDialog by remember { mutableStateOf(false) }
+    var showSkincareDialog by remember { mutableStateOf(false) }
 //    var showHapusDialog by remember { mutableStateOf(false) }
 //    var selectedSkincare by remember { mutableStateOf<Skincare?>(null) }
 
     var bitmap: Bitmap? by remember { mutableStateOf(null) }
     val launcher = rememberLauncherForActivityResult(CropImageContract()) {
         bitmap = getCroppedImage(context.contentResolver, it)
-//        if (bitmap != null) showHewanDialog = true
+        if (bitmap != null) showSkincareDialog = true
     }
 
     Scaffold(
@@ -178,6 +179,20 @@ fun KoleksiScreen(navController: NavHostController) {
                 CoroutineScope(Dispatchers.IO).launch { signOut(context, dataStore) }
                 showDialog = false
             }
+        }
+
+        if (showSkincareDialog) {
+            SkincareDialog(
+                bitmap = bitmap,
+                onDismissRequest = { showSkincareDialog = false }) { namaSkincare, jenisSkincare ->
+//                viewModel.saveData(user.email, namaSkincare, jenisSkincare, bitmap!!)
+                showSkincareDialog = false
+            }
+
+//            if (errorMessage != null) {
+//                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+//                viewModel.clearMessage()
+//            }
         }
     }
 }
