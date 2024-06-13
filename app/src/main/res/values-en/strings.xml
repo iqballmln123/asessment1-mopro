@@ -5,7 +5,7 @@
     <!--    Navigasi-->
     <string name="info">About the App</string>
     <string name="page1">Analyze Your Skin</string>
-    <string name="page2">Recommendation</string>
+    <string name="page2">Collection</string>
     <string name="page3">Care Routine</string>
     <string name="page4">Skincare Journal</string>
     <string name="kembali">Back</string>
