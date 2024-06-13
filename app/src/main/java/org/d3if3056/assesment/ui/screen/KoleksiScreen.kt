@@ -147,7 +147,12 @@ fun ListItem(skincare: Skincare){
     ){
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(SkincareApi.getSkincareUrl(skincare.imageId))
+                .data(
+                    if (skincare.namaSkincare == "Cosrx")
+                        SkincareApi.getSkincareUrl("not-found")
+                    else
+                    SkincareApi.getSkincareUrl(skincare.imageId)
+                )
                 .crossfade(true)
                 .build(), 
             contentDescription = stringResource(id = R.string.gambar, skincare.namaSkincare),
