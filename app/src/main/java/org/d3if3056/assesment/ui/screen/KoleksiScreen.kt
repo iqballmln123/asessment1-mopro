@@ -20,6 +20,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3056.assesment.R
@@ -41,7 +43,7 @@ import org.d3if3056.assesment.ui.theme.AssesmentTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RekomendasiScreen(navController: NavHostController) {
+fun KoleksiScreen(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -73,131 +75,28 @@ fun RekomendasiScreen(navController: NavHostController) {
             )
         }
     ) { padding ->
-        Column(modifier = Modifier
-            .padding(padding)
+        ScreenContent(Modifier.padding(padding))
+    }
+}
+
+@Composable
+fun ScreenContent(modifier: Modifier){
+    val viewModel: KoleksiViewModel = viewModel()
+
+    Column (
+        modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.intro_rekomendasi),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Justify
-            )
-            // sabun wajah
-            Text(
-                text = stringResource(id = R.string.sabun_muka),
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.headlineSmall
-            )
-            Image(
-                painter = painterResource(id = R.drawable.facial_wash),
-                contentDescription = stringResource(id = R.string.sabun_muka),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(200.dp)
-                    .border(1.dp, Color.Gray)
-                    .align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "True to Skin Matcha Oat Gentle Cleanser",
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = stringResource(id = R.string.sabun_muka_deskripsi),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Justify
-            )
-            // toner wajah
-            Text(
-                text = stringResource(id = R.string.toner_muka),
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                style = MaterialTheme.typography.headlineSmall
-            )
-            Image(
-                painter = painterResource(id = R.drawable.toner_wajah),
-                contentDescription = stringResource(id = R.string.toner_muka),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(200.dp)
-                    .border(1.dp, Color.Gray)
-                    .align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "Dear Klairs Supple Preparation Facial Toner",
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = stringResource(id = R.string.toner_muka_deskripsi),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Justify
-            )
-            // serum wajah
-            Text(
-                text = stringResource(id = R.string.serum_muka),
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                style = MaterialTheme.typography.headlineSmall
-            )
-            Image(
-                painter = painterResource(id = R.drawable.serum_wajah),
-                contentDescription = stringResource(id = R.string.serum_muka),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(200.dp)
-                    .border(1.dp, Color.Gray)
-                    .align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "Avoskin Your Skin Bae Serum Alpha Arbutin 3% + Grapeseed",
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = stringResource(id = R.string.serum_muka_deskripsi),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Justify
-            )
-            // masker wajah
-            Text(
-                text = stringResource(id = R.string.masker_muka),
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                style = MaterialTheme.typography.headlineSmall
-            )
-            Image(
-                painter = painterResource(id = R.drawable.masker_wajah),
-                contentDescription = stringResource(id = R.string.masker_muka),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(200.dp)
-                    .border(1.dp, Color.Gray)
-                    .align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "Whitelab Mugwort Pore Clarifying Mask",
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = stringResource(id = R.string.masker_muka_deskripsi),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Justify
-            )
-        }
+            .padding(16.dp)
+    ){
+
     }
 }
 
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun RekomendasiScreenPreview() {
+fun KoleksiScreenPreview() {
     AssesmentTheme {
-        RekomendasiScreen(rememberNavController())
+        KoleksiScreen(rememberNavController())
     }
 }
