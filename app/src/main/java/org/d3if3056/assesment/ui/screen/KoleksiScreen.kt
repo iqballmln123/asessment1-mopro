@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,6 +34,9 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,10 +50,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.ClearCredentialException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -79,6 +85,13 @@ fun KoleksiScreen(navController: NavHostController) {
     val context = LocalContext.current
     val dataStore = UserDataStore(context)
     val user by dataStore.userFlow.collectAsState(initial = User())
+
+    var showDialog by remember { mutableStateOf(false) }
+    var showHewanDialog by remember { mutableStateOf(false) }
+    var showHapusDialog by remember { mutableStateOf(false) }
+//    var selectedSkincare by remember { mutableStateOf<Skincare?>(null) }
+
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -110,8 +123,8 @@ fun KoleksiScreen(navController: NavHostController) {
                         if (user.email.isEmpty()) {
                             CoroutineScope(Dispatchers.IO).launch { signIn(context, dataStore) }
                         } else {
-                            Log.d("SIGN-IN", "User: $user")
-//                            showDialog = true
+//                            Log.d("SIGN-IN", "User: $user")
+                            showDialog = true
                         }
                     }) {
                         Icon(
@@ -143,6 +156,15 @@ fun KoleksiScreen(navController: NavHostController) {
 //        }
     ) { padding ->
         ScreenContent(Modifier.padding(padding))
+
+        if (showDialog) {
+            ProfilDialog(
+                user = user,
+                onDismissRequest = { showDialog = false }) {
+                CoroutineScope(Dispatchers.IO).launch { signOut(context, dataStore) }
+                showDialog = false
+            }
+        }
     }
 }
 
@@ -193,23 +215,23 @@ fun ScreenContent(modifier: Modifier){
 }
 
 @Composable
-fun ListItem(skincare: Skincare){
+fun ListItem(skincare: Skincare) {
     Box(
         modifier = Modifier
             .padding(4.dp)
             .border(1.dp, Color.Gray),
         contentAlignment = Alignment.BottomCenter
-    ){
+    ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(
                     if (skincare.namaSkincare == "Cosrx")
                         SkincareApi.getSkincareUrl("not-found")
                     else
-                    SkincareApi.getSkincareUrl(skincare.imageId)
+                        SkincareApi.getSkincareUrl(skincare.imageId)
                 )
                 .crossfade(true)
-                .build(), 
+                .build(),
             contentDescription = stringResource(id = R.string.gambar, skincare.namaSkincare),
             contentScale = ContentScale.Crop,
             placeholder = painterResource(id = R.drawable.loading_img),
@@ -236,52 +258,89 @@ fun ListItem(skincare: Skincare){
                 fontSize = 14.sp,
                 color = Color.White
             )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier
+                    .padding(4.dp)
+                    .background(Color(0f, 0f, 0f, 0.5f))
+                    .fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(4.dp) //antara border dan gambar
+                ) {
+                    Text(
+                        text = skincare.namaSkincare,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                    Text(
+                        text = skincare.jenisSkincare,
+                        fontStyle = FontStyle.Italic,
+                        fontSize = 14.sp,
+                        color = Color.White
+                    )
+                }
+            }
         }
     }
 }
+    private suspend fun signIn(
+        context: Context,
+        dataStore: UserDataStore
+    ) {
+        val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(false)
+            .setServerClientId(BuildConfig.API_KEY)
+            .build()
 
-private suspend fun signIn(
-    context: Context,
-    dataStore: UserDataStore
-) {
-    val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
-        .setFilterByAuthorizedAccounts(false)
-        .setServerClientId(BuildConfig.API_KEY)
-        .build()
+        val request: GetCredentialRequest = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
 
-    val request: GetCredentialRequest = GetCredentialRequest.Builder()
-        .addCredentialOption(googleIdOption)
-        .build()
-
-    try {
-        val credentialManager = CredentialManager.create(context)
-        val result = credentialManager.getCredential(context, request)
-        handleSignIn(result, dataStore)
-    } catch (e: GetCredentialException) {
-        Log.e("SIGN-IN", "Error: ${e.errorMessage}")
+        try {
+            val credentialManager = CredentialManager.create(context)
+            val result = credentialManager.getCredential(context, request)
+            handleSignIn(result, dataStore)
+        } catch (e: GetCredentialException) {
+            Log.e("SIGN-IN", "Error: ${e.errorMessage}")
+        }
     }
-}
 
 private suspend fun handleSignIn(
     result: GetCredentialResponse,
     dataStore: UserDataStore
 ) {
     val credential = result.credential
+
     if (credential is CustomCredential &&
         credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-    ) {
-        try {
-            val googleId = GoogleIdTokenCredential.createFrom(credential.data)
+        ) {
+            try {
+                val googleId = GoogleIdTokenCredential.createFrom(credential.data)
 //            Log.d("SIGN-IN", "User email: ${googleId.id}")
-            val nama = googleId.displayName ?: ""
-            val email = googleId.id
-            val photoUrl = googleId.profilePictureUri.toString()
-            dataStore.saveData(User(nama, email, photoUrl))
-        } catch (e: GoogleIdTokenParsingException) {
-            Log.e("SIGN-IN", "Error: ${e.message}")
+                val nama = googleId.displayName ?: ""
+                val email = googleId.id
+                val photoUrl = googleId.profilePictureUri.toString()
+                dataStore.saveData(User(nama, email, photoUrl))
+            } catch (e: GoogleIdTokenParsingException) {
+                Log.e("SIGN-IN", "Error: ${e.message}")
+            }
+        } else {
+            Log.e("SIGN-IN", "Error: credential tidak dikenali")
         }
-    } else {
-        Log.e("SIGN-IN", "Error: credential tidak dikenali")
+}
+
+private suspend fun signOut(context: Context, dataStore: UserDataStore) {
+    try {
+        val credentialManager = CredentialManager.create(context)
+        credentialManager.clearCredentialState(
+            ClearCredentialStateRequest()
+        )
+        dataStore.saveData(User())
+    } catch (e: ClearCredentialException) {
+        Log.e("SIGN-IN", "Error: ${e.errorMessage}")
     }
 }
 
