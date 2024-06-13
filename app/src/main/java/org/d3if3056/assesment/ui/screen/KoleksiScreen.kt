@@ -65,15 +65,21 @@ import kotlinx.coroutines.launch
 import org.d3if3056.assesment.BuildConfig
 import org.d3if3056.assesment.R
 import org.d3if3056.assesment.model.Skincare
+import org.d3if3056.assesment.model.User
 import org.d3if3056.assesment.network.ApiSatus
 import org.d3if3056.assesment.network.SkincareApi
+import org.d3if3056.assesment.network.UserDataStore
 import org.d3if3056.assesment.ui.theme.AssesmentTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KoleksiScreen(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+
     val context = LocalContext.current
+    val dataStore = UserDataStore(context)
+    val user by dataStore.userFlow.collectAsState(initial = User())
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -101,13 +107,12 @@ fun KoleksiScreen(navController: NavHostController) {
                 },
                 actions = {
                     IconButton(onClick = {
-                        CoroutineScope(Dispatchers.IO).launch { signIn(context) }
-//                        if (user.email.isEmpty()) {
-//                            CoroutineScope(Dispatchers.IO).launch { signIn(context, dataStore) }
-//                        } else {
-////                            Log.d("SIGN-IN", "User: $user")
+                        if (user.email.isEmpty()) {
+                            CoroutineScope(Dispatchers.IO).launch { signIn(context, dataStore) }
+                        } else {
+                            Log.d("SIGN-IN", "User: $user")
 //                            showDialog = true
-//                        }
+                        }
                     }) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_account_circle_24),
@@ -237,7 +242,7 @@ fun ListItem(skincare: Skincare){
 
 private suspend fun signIn(
     context: Context,
-//    dataStore: UserDataStore
+    dataStore: UserDataStore
 ) {
     val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
         .setFilterByAuthorizedAccounts(false)
@@ -251,7 +256,7 @@ private suspend fun signIn(
     try {
         val credentialManager = CredentialManager.create(context)
         val result = credentialManager.getCredential(context, request)
-        handleSignIn(result)
+        handleSignIn(result, dataStore)
     } catch (e: GetCredentialException) {
         Log.e("SIGN-IN", "Error: ${e.errorMessage}")
     }
@@ -259,7 +264,7 @@ private suspend fun signIn(
 
 private suspend fun handleSignIn(
     result: GetCredentialResponse,
-//    dataStore: UserDataStore
+    dataStore: UserDataStore
 ) {
     val credential = result.credential
     if (credential is CustomCredential &&
@@ -267,11 +272,11 @@ private suspend fun handleSignIn(
     ) {
         try {
             val googleId = GoogleIdTokenCredential.createFrom(credential.data)
-            Log.d("SIGN-IN", "User email: ${googleId.id}")
-//            val nama = googleId.displayName ?: ""
-//            val email = googleId.id
-//            val photoUrl = googleId.profilePictureUri.toString()
-//            dataStore.saveData(User(nama, email, photoUrl))
+//            Log.d("SIGN-IN", "User email: ${googleId.id}")
+            val nama = googleId.displayName ?: ""
+            val email = googleId.id
+            val photoUrl = googleId.profilePictureUri.toString()
+            dataStore.saveData(User(nama, email, photoUrl))
         } catch (e: GoogleIdTokenParsingException) {
             Log.e("SIGN-IN", "Error: ${e.message}")
         }
