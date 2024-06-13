@@ -27,4 +27,8 @@ object SkincareApi {
     val service: SkincareApiService by lazy {
         retrofit.create(SkincareApiService::class.java)
     }
+
+    fun getSkincareUrl(imageId: String): String{
+        return "$BASE_URL$imageId.jpg"
+    }
 }

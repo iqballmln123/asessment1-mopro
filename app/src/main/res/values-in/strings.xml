@@ -75,15 +75,7 @@
     <string name="rekomendasi_komplikasi">\nRekomendasi bahan skincare sesuai komplikasi kulit:</string>
 
     <!--    Rekomendasi-->
-    <string name="intro_rekomendasi">GlowGuide memberikan informasi tentang produk-produk apa saja yang sedang direkomendasi!</string>
-    <string name="sabun_muka">1. Sabun Wajah</string>
-    <string name="sabun_muka_deskripsi">Kandungan di dalamnya ada oat, heartleaf, collagen, dan real green tea leaves yang dapat membersihkan wajahmu dari kotoran, debu polusi udara, dan residu dari makeup yang masih tersisa di wajahmu usai beraktivitas di luar ruangan. Walaupun dapat deep cleanse wajahmu, sabun cuci muka ini nggak akan memberikan efek seperti wajah ketarik, melainkan wajahmu jadi terasa lebih lembut dan terjaga kelembapannya! Face wash ini juga cocok untuk kamu yang memiliki jenis kulit sensitif dan acne prone ya.</string>
-    <string name="toner_muka">2. Toner Wajah</string>
-    <string name="toner_muka_deskripsi">Usai mencuci wajah dengan face wash, langkah selanjutnya dalam ritual skincare-mu adalah menggunakan toner. Yup, penggunaan toner dapat membantu penyerapan produk skincare selanjutnya jauh lebih baik lagi ke dalam kulitmu. Nah, toner dari Dear Klairs ini dapat memberikan kelembapan yang maksimal untuk kulitmu, menyeimbangkan pH kulit, dan yang paling utama, toner ini juga bisa meredakan iritasi pada kulitmu, lho.</string>
-    <string name="serum_muka">3. Serum Wajah</string>
-    <string name="serum_muka_deskripsi">Lagi cari serum yang bisa membantu kulitmu tampak cerah dan meredakan bekas jerawat? Kamu harus jadikan Avoskin Your Skin Bae Serum Alpha Arbutin 3% + Grapeseed ke dalam wish list skincare yang patut kamu coba! Serum ini menggabungkan active ingredients Alpha Arbutin 3% dan ekstrak dari grapeseed. Dengan kombinasi keduanya, kamu bisa achieve kulit wajah yang tampak cerah. Ditambah lagi grapeseed yang kaya antioksidan juga memiliki peran untuk menjaga sel kulit wajah jadi terasa dan terlihat lebih sehat!</string>
-    <string name="masker_muka">4. Masker Wajah</string>
-    <string name="masker_muka_deskripsi">Rutin menggunakan masker eksfoliasi dapat membantu untuk mengangkat sel-sel kulit mati, sehingga kulitmu akan terasa lebih bersih. Salah satu masker eksfoliasi yang digemari oleh banyak orang adalah Whitelab Mugwort Pore Clarifying Mask. Dengan kandungan tea tree, masker ini akan mengontrol minyak berlebih yang hadir di wajahmu dan membantu untuk mengurangi kemunculan jerawat juga, bila kamu menggunakannya secara rutin. Di tambah, ada kandungan BHA yang berfungsi untuk mengangkat sel kulit mati!</string>
+    <string name="gambar">Gambar %1$s</string>
 
     <!--    Rutinitas-->
     <string name="intro_rutinitas">Untuk tetap menjaga kulit sehat, segar dan berkilau. Kamu harus ingat Rutinitas sehari-hari ini ya!</string>

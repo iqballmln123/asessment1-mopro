@@ -75,15 +75,7 @@
     <string name="rekomendasi_komplikasi">\nRecommended skincare ingredients for your skin complications:</string>
 
     <!--    Recommendations-->
-    <string name="intro_rekomendasi">GlowGuide provides information about recommended products!</string>
-    <string name="sabun_muka">1. Facial Cleanser</string>
-    <string name="sabun_muka_deskripsi">It contains oat, heartleaf, collagen, and real green tea leaves that can cleanse your face from dirt, dust, air pollution, and residual makeup after outdoor activities. Although it deeply cleanses your face, this face wash would not give a tight feeling, but rather leave your face feeling softer and moisturized! This face wash is also suitable for those with sensitive and acne-prone skin.</string>
-    <string name="toner_muka">2. Facial Toner</string>
-    <string name="toner_muka_deskripsi">After washing your face with a face wash, the next step in your skincare ritual is to use toner. Yup, using toner can help the absorption of subsequent skincare products into your skin even better. Well, this toner from Dear Klairs can provide maximum moisture for your skin, balance the skins pH, and most importantly, this toner can also soothe irritation on your skin.</string>
-    <string name="serum_muka">3. Facial Serum</string>
-    <string name="serum_muka_deskripsi">Looking for a serum that can help brighten your skin and reduce acne scars? You should include Avoskin Your Skin Bae Serum Alpha Arbutin 3% + Grapeseed in your skincare wish list! This serum combines active ingredients Alpha Arbutin 3% and grapeseed extract. With both combinations, you can achieve brighter-looking facial skin. Moreover, grapeseed, which is rich in antioxidants, also plays a role in keeping the skin cells feeling and looking healthier!</string>
-    <string name="masker_muka">4. Facial Mask</string>
-    <string name="masker_muka_deskripsi">Using exfoliating masks regularly can help remove dead skin cells, leaving your skin feeling cleaner. One of the exfoliating masks favored by many is the Whitelab Mugwort Pore Clarifying Mask. With tea tree content, this mask will control excess oil on your face and also help reduce the appearance of acne if you use it regularly. Plus, there is BHA content that functions to remove dead skin cells!</string>
+    <string name="gambar">Image %1$s</string>
 
     <!--    Routine-->
     <string name="intro_rutinitas">To keep your skin healthy, fresh, and glowing, you must remember this daily routine!</string>
