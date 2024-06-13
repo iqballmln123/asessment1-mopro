@@ -111,7 +111,8 @@ fun ScreenContent(modifier: Modifier){
                 modifier = modifier
                     .fillMaxSize()
                     .padding(4.dp),
-                columns = GridCells.Fixed(2)
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(bottom = 80.dp)
             ){
                 items(data) { ListItem(skincare = it)}
             }
@@ -139,7 +140,9 @@ fun ScreenContent(modifier: Modifier){
 @Composable
 fun ListItem(skincare: Skincare){
     Box(
-        modifier = Modifier.padding(4.dp).border(1.dp, Color.Gray),
+        modifier = Modifier
+            .padding(4.dp)
+            .border(1.dp, Color.Gray),
         contentAlignment = Alignment.BottomCenter
     ){
         AsyncImage(
@@ -151,10 +154,13 @@ fun ListItem(skincare: Skincare){
             contentScale = ContentScale.Crop,
             placeholder = painterResource(id = R.drawable.loading_img),
             error = painterResource(id = R.drawable.broken_image_24),
-            modifier = Modifier.fillMaxWidth().padding(4.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
         )
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(4.dp) //antara border dan gambar
                 .background(Color(red = 0f, green = 0f, blue = 0f, alpha = 0.5f))
                 .padding(4.dp)
