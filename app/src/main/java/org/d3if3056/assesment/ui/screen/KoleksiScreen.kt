@@ -220,6 +220,7 @@ fun ScreenContent(viewModel: KoleksiViewModel, userId: String, modifier: Modifie
                 CircularProgressIndicator()
             }
         }
+
         ApiSatus.SUCCESS -> {
             LazyVerticalGrid (
                 modifier = modifier
