@@ -22,7 +22,7 @@ class KoleksiViewModel : ViewModel() {
         retrieveData()
     }
 
-    private fun retrieveData(){
+    fun retrieveData(){
         viewModelScope.launch(Dispatchers.IO) {
             status.value = ApiSatus.LOADING
             try {
@@ -30,6 +30,7 @@ class KoleksiViewModel : ViewModel() {
                 status.value = ApiSatus.SUCCESS
             } catch (e: Exception){
                 Log.d("KoleksiViewModel", "Failure: ${e.message}")
+                status.value = ApiSatus.FAILED
             }
         }
     }

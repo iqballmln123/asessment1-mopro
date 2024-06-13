@@ -42,4 +42,4 @@ object SkincareApi {
     }
 }
 
-enum class ApiSatus { LOADING, SUCCESS }
+enum class ApiSatus { LOADING, SUCCESS, FAILED }
