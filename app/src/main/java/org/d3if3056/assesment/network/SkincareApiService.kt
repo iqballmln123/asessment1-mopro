@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.d3if3056.assesment.model.OpStatus
 import org.d3if3056.assesment.model.Skincare
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -29,8 +30,18 @@ private val retrofit = Retrofit.Builder()
 interface SkincareApiService {
     @GET("api_chae.php")
     suspend fun getSkincare(
-
+        @Header("Authorization") userId: String
     ): List<Skincare>
+
+    @Multipart
+    @POST("api_chae.php")
+    suspend fun postSkincare(
+        @Header("Authorization") userId: String,
+        @Part("namaSkincare") namaSkincare: RequestBody,
+        @Part("jenisSkincare") jenisSkincare: RequestBody,
+        @Part image: MultipartBody.Part
+    ): OpStatus
+
 }
 
 object SkincareApi {

@@ -39,6 +39,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -96,6 +97,9 @@ fun KoleksiScreen(navController: NavHostController) {
     val context = LocalContext.current
     val dataStore = UserDataStore(context)
     val user by dataStore.userFlow.collectAsState(initial = User())
+
+    val viewModel: KoleksiViewModel = viewModel()
+    val errorMessage by viewModel.errorMessage
 
     var showDialog by remember { mutableStateOf(false) }
     var showSkincareDialog by remember { mutableStateOf(false) }
@@ -170,7 +174,7 @@ fun KoleksiScreen(navController: NavHostController) {
             }
         }
     ) { padding ->
-        ScreenContent(Modifier.padding(padding))
+        ScreenContent(viewModel, user.email, Modifier.padding(padding))
 
         if (showDialog) {
             ProfilDialog(
@@ -185,23 +189,27 @@ fun KoleksiScreen(navController: NavHostController) {
             SkincareDialog(
                 bitmap = bitmap,
                 onDismissRequest = { showSkincareDialog = false }) { namaSkincare, jenisSkincare ->
-//                viewModel.saveData(user.email, namaSkincare, jenisSkincare, bitmap!!)
+                viewModel.saveData(user.email, namaSkincare, jenisSkincare, bitmap!!)
                 showSkincareDialog = false
             }
 
-//            if (errorMessage != null) {
-//                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-//                viewModel.clearMessage()
-//            }
+            if (errorMessage != null) {
+                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                viewModel.clearMessage()
+            }
         }
     }
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier){
-    val viewModel: KoleksiViewModel = viewModel()
+fun ScreenContent(viewModel: KoleksiViewModel, userId: String, modifier: Modifier){
+//    val viewModel: KoleksiViewModel = viewModel()
     val data by viewModel.data
     val status by viewModel.status.collectAsState()
+
+    LaunchedEffect(userId) {
+        viewModel.retrieveData(userId)
+    }
 
     when(status){
         ApiSatus.LOADING -> {
@@ -232,7 +240,7 @@ fun ScreenContent(modifier: Modifier){
             ) {
                 Text(text = stringResource(id = R.string.error))
                 Button(
-                    onClick = { viewModel.retrieveData() },
+                    onClick = { viewModel.retrieveData(userId) },
                     modifier = Modifier.padding(top = 16.dp),
                     contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
                 ) {
