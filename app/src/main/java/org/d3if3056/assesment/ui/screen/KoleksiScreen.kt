@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +46,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import org.d3if3056.assesment.R
 import org.d3if3056.assesment.model.Skincare
+import org.d3if3056.assesment.network.ApiSatus
 import org.d3if3056.assesment.network.SkincareApi
 import org.d3if3056.assesment.ui.theme.AssesmentTheme
 
@@ -89,14 +92,27 @@ fun KoleksiScreen(navController: NavHostController) {
 fun ScreenContent(modifier: Modifier){
     val viewModel: KoleksiViewModel = viewModel()
     val data by viewModel.data
+    val status by viewModel.status.collectAsState()
 
-    LazyVerticalGrid (
-        modifier = modifier
-            .fillMaxSize()
-            .padding(4.dp),
-        columns = GridCells.Fixed(2)
-    ){
-        items(data) { ListItem(skincare = it)}
+    when(status){
+        ApiSatus.LOADING -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+        ApiSatus.SUCCESS -> {
+            LazyVerticalGrid (
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(4.dp),
+                columns = GridCells.Fixed(2)
+            ){
+                items(data) { ListItem(skincare = it)}
+            }
+        }
     }
 }
 
