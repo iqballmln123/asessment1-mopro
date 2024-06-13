@@ -1,6 +1,8 @@
 package org.d3if3056.assesment.ui.screen
 
+import android.content.Context
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -14,11 +16,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -42,11 +46,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.d3if3056.assesment.BuildConfig
 import org.d3if3056.assesment.R
 import org.d3if3056.assesment.model.Skincare
 import org.d3if3056.assesment.network.ApiSatus
@@ -57,7 +73,7 @@ import org.d3if3056.assesment.ui.theme.AssesmentTheme
 @Composable
 fun KoleksiScreen(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-
+    val context = LocalContext.current
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -83,9 +99,43 @@ fun KoleksiScreen(navController: NavHostController) {
                         )
                     }
                 },
+                actions = {
+                    IconButton(onClick = {
+                        CoroutineScope(Dispatchers.IO).launch { signIn(context) }
+//                        if (user.email.isEmpty()) {
+//                            CoroutineScope(Dispatchers.IO).launch { signIn(context, dataStore) }
+//                        } else {
+////                            Log.d("SIGN-IN", "User: $user")
+//                            showDialog = true
+//                        }
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_account_circle_24),
+                            contentDescription = stringResource(id = R.string.profil),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
                 scrollBehavior = scrollBehavior
             )
-        }
+        },
+//        floatingActionButton = {
+//            FloatingActionButton(onClick = {
+////                val options = CropImageContractOptions(
+////                    null, CropImageOptions(
+////                        imageSourceIncludeGallery = false,
+////                        imageSourceIncludeCamera = true,
+////                        fixAspectRatio = true
+////                    )
+////                )
+////                launcher.launch(options)
+//            }) {
+//                Icon(
+//                    imageVector = Icons.Default.Add,
+//                    contentDescription = stringResource(id = R.string.tambah_skincare)
+//                )
+//            }
+//        }
     ) { padding ->
         ScreenContent(Modifier.padding(padding))
     }
@@ -182,6 +232,51 @@ fun ListItem(skincare: Skincare){
                 color = Color.White
             )
         }
+    }
+}
+
+private suspend fun signIn(
+    context: Context,
+//    dataStore: UserDataStore
+) {
+    val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+        .setFilterByAuthorizedAccounts(false)
+        .setServerClientId(BuildConfig.API_KEY)
+        .build()
+
+    val request: GetCredentialRequest = GetCredentialRequest.Builder()
+        .addCredentialOption(googleIdOption)
+        .build()
+
+    try {
+        val credentialManager = CredentialManager.create(context)
+        val result = credentialManager.getCredential(context, request)
+        handleSignIn(result)
+    } catch (e: GetCredentialException) {
+        Log.e("SIGN-IN", "Error: ${e.errorMessage}")
+    }
+}
+
+private suspend fun handleSignIn(
+    result: GetCredentialResponse,
+//    dataStore: UserDataStore
+) {
+    val credential = result.credential
+    if (credential is CustomCredential &&
+        credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+    ) {
+        try {
+            val googleId = GoogleIdTokenCredential.createFrom(credential.data)
+            Log.d("SIGN-IN", "User email: ${googleId.id}")
+//            val nama = googleId.displayName ?: ""
+//            val email = googleId.id
+//            val photoUrl = googleId.profilePictureUri.toString()
+//            dataStore.saveData(User(nama, email, photoUrl))
+        } catch (e: GoogleIdTokenParsingException) {
+            Log.e("SIGN-IN", "Error: ${e.message}")
+        }
+    } else {
+        Log.e("SIGN-IN", "Error: credential tidak dikenali")
     }
 }
 

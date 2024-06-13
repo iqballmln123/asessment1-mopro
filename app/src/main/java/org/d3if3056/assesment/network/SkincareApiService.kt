@@ -29,7 +29,7 @@ private val retrofit = Retrofit.Builder()
 interface SkincareApiService {
     @GET("api_chae.php")
     suspend fun getSkincare(
-        @Header("Authorization") userId: String
+
     ): List<Skincare>
 }
 
