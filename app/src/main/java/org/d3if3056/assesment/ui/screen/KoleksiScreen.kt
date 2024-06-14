@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -103,8 +104,8 @@ fun KoleksiScreen(navController: NavHostController) {
 
     var showDialog by remember { mutableStateOf(false) }
     var showSkincareDialog by remember { mutableStateOf(false) }
-//    var showHapusDialog by remember { mutableStateOf(false) }
-//    var selectedSkincare by remember { mutableStateOf<Skincare?>(null) }
+    var showHapusDialog by remember { mutableStateOf(false) }
+    var selectedSkincare by remember { mutableStateOf<Skincare?>(null) }
 
     var bitmap: Bitmap? by remember { mutableStateOf(null) }
     val launcher = rememberLauncherForActivityResult(CropImageContract()) {
@@ -142,7 +143,7 @@ fun KoleksiScreen(navController: NavHostController) {
                         if (user.email.isEmpty()) {
                             CoroutineScope(Dispatchers.IO).launch { signIn(context, dataStore) }
                         } else {
-//                            Log.d("SIGN-IN", "User: $user")
+                            Log.d("SIGN-IN", "User: $user")
                             showDialog = true
                         }
                     }) {
@@ -158,14 +159,18 @@ fun KoleksiScreen(navController: NavHostController) {
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                val options = CropImageContractOptions(
-                    null, CropImageOptions(
-                        imageSourceIncludeGallery = false,
-                        imageSourceIncludeCamera = true,
-                        fixAspectRatio = true
+                if (user.email.isEmpty()) {
+                    Toast.makeText(context, "Please sign in to add skincare.",Toast.LENGTH_LONG ).show()
+                } else {
+                    val options = CropImageContractOptions(
+                        null, CropImageOptions(
+                            imageSourceIncludeGallery = false,
+                            imageSourceIncludeCamera = true,
+                            fixAspectRatio = true
+                        )
                     )
-                )
-                launcher.launch(options)
+                    launcher.launch(options)
+                }
             }) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -174,7 +179,12 @@ fun KoleksiScreen(navController: NavHostController) {
             }
         }
     ) { padding ->
-        ScreenContent(viewModel, user.email, Modifier.padding(padding))
+        ScreenContent(viewModel, user.email, Modifier.padding(padding),
+            onDeleteRequest = { hewan ->
+                selectedSkincare = hewan
+                showHapusDialog = true
+            }
+        )
 
         if (showDialog) {
             ProfilDialog(
@@ -198,11 +208,27 @@ fun KoleksiScreen(navController: NavHostController) {
                 viewModel.clearMessage()
             }
         }
+
+        if (showHapusDialog && selectedSkincare != null) {
+            HapusDialog(
+                onDismissRequest = {
+                    showHapusDialog = false
+                    selectedSkincare = null
+                },
+                onConfirmation = {
+                    selectedSkincare?.let {
+                        viewModel.deleteData(user.email, it.id)
+                        showHapusDialog = false
+                        selectedSkincare = null
+                    }
+                }
+            )
+        }
     }
 }
 
 @Composable
-fun ScreenContent(viewModel: KoleksiViewModel, userId: String, modifier: Modifier){
+fun ScreenContent(viewModel: KoleksiViewModel, userId: String, modifier: Modifier, onDeleteRequest: (Skincare) -> Unit) {
 //    val viewModel: KoleksiViewModel = viewModel()
     val data by viewModel.data
     val status by viewModel.status.collectAsState()
@@ -211,7 +237,7 @@ fun ScreenContent(viewModel: KoleksiViewModel, userId: String, modifier: Modifie
         viewModel.retrieveData(userId)
     }
 
-    when(status){
+    when (status) {
         ApiSatus.LOADING -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -222,38 +248,43 @@ fun ScreenContent(viewModel: KoleksiViewModel, userId: String, modifier: Modifie
         }
 
         ApiSatus.SUCCESS -> {
-            LazyVerticalGrid (
+            LazyVerticalGrid(
                 modifier = modifier
                     .fillMaxSize()
                     .padding(4.dp),
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(bottom = 80.dp)
-            ){
-                items(data) { ListItem(skincare = it)}
+            ) {
+                items(data) { skincare ->
+                    ListItem(
+                        skincare = skincare,
+                        onDelete = { onDeleteRequest(skincare) }
+                    )
+                }
             }
         }
 
-        ApiSatus.FAILED -> {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = stringResource(id = R.string.error))
-                Button(
-                    onClick = { viewModel.retrieveData(userId) },
-                    modifier = Modifier.padding(top = 16.dp),
-                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+            ApiSatus.FAILED -> {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = stringResource(id = R.string.try_again))
+                    Text(text = stringResource(id = R.string.error))
+                    Button(
+                        onClick = { viewModel.retrieveData(userId) },
+                        modifier = Modifier.padding(top = 16.dp),
+                        contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+                    ) {
+                        Text(text = stringResource(id = R.string.try_again))
+                    }
                 }
             }
         }
     }
-}
 
 @Composable
-fun ListItem(skincare: Skincare) {
+fun ListItem(skincare: Skincare, onDelete: () -> Unit) {
     Box(
         modifier = Modifier
             .padding(4.dp)
@@ -278,52 +309,43 @@ fun ListItem(skincare: Skincare) {
                 .fillMaxWidth()
                 .padding(4.dp)
         )
-        Column(
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp) //antara border dan gambar
-                .background(Color(red = 0f, green = 0f, blue = 0f, alpha = 0.5f))
                 .padding(4.dp)
+                .background(Color(0f, 0f, 0f, 0.5f))
+                .fillMaxWidth()
         ) {
-            Text(
-                text = skincare.namaSkincare,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-            Text(
-                text = skincare.jenisSkincare,
-                fontStyle = FontStyle.Italic,
-                fontSize = 14.sp,
-                color = Color.White
-            )
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Bottom,
+            Column(
                 modifier = Modifier
                     .padding(4.dp)
-                    .background(Color(0f, 0f, 0f, 0.5f))
-                    .fillMaxWidth()
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(4.dp) //antara border dan gambar
-                ) {
-                    Text(
-                        text = skincare.namaSkincare,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                    Text(
-                        text = skincare.jenisSkincare,
-                        fontStyle = FontStyle.Italic,
-                        fontSize = 14.sp,
-                        color = Color.White
-                    )
-                }
+                Text(
+                    text = skincare.namaSkincare,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Text(
+                    text = skincare.jenisSkincare,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+            }
+            IconButton(
+                onClick = { onDelete() }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = stringResource(id = R.string.hapus),
+                    tint = Color.White
+                )
             }
         }
     }
 }
+
 private suspend fun signIn(
     context: Context,
     dataStore: UserDataStore
@@ -355,7 +377,7 @@ private suspend fun handleSignIn(
         credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
             try {
                 val googleId = GoogleIdTokenCredential.createFrom(credential.data)
-//            Log.d("SIGN-IN", "User email: ${googleId.id}")
+            Log.d("SIGN-IN", "User email: ${googleId.id}")
                 val nama = googleId.displayName ?: ""
                 val email = googleId.id
                 val photoUrl = googleId.profilePictureUri.toString()
