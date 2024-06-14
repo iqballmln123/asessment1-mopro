@@ -42,6 +42,11 @@ interface SkincareApiService {
         @Part image: MultipartBody.Part
     ): OpStatus
 
+    @DELETE("api_chae.php")
+    suspend fun deleteSkincare(
+        @Header("Authorization") userId: String,
+        @Query("id") imageId: String
+    ): OpStatus
 }
 
 object SkincareApi {
