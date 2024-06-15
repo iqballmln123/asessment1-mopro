@@ -160,7 +160,7 @@ fun KoleksiScreen(navController: NavHostController) {
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 if (user.email.isEmpty()) {
-                    Toast.makeText(context, "Please sign in to add skincare.",Toast.LENGTH_LONG ).show()
+                    Toast.makeText(context, "Harap login untuk memasukan skincare",Toast.LENGTH_LONG ).show()
                 } else {
                     val options = CropImageContractOptions(
                         null, CropImageOptions(
