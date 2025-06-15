@@ -1,3 +1,3 @@
-Nama    : Chaeza Fauzyyah Inayah
+Nama    : Mochamad Iqbal Maulana
 
-NIM     : 6706223056
+NIM     : 607062300143
